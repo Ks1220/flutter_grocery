@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/HomePage.dart';
+import 'SignUp.dart';
 import 'Start.dart';
+import 'Login.dart';
 
 void main() => runApp(MyApp());
 
