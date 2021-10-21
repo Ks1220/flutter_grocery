@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import 'Login.dart';
+import 'SignUp.dart';
 
 class Start extends StatefulWidget {
   const Start({Key? key}) : super(key: key);
@@ -13,6 +14,10 @@ class Start extends StatefulWidget {
 class _StartState extends State<Start> {
   navigateToLogin() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+  }
+
+  navigateToSignup() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 
   @override
@@ -79,7 +84,7 @@ class _StartState extends State<Start> {
                       minWidth: 337.0,
                       height: 53.0,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: navigateToSignup,
                         child: Text("Sign Up",
                             style: TextStyle(
                                 fontSize: 18,
@@ -110,10 +115,6 @@ class _StartState extends State<Start> {
             ),
             width: 300,
           ),
-          // SignInButton(
-          //   Buttons.Google,
-          //   onPressed: () {},
-          // )
         ])));
   }
 }
