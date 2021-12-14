@@ -28,6 +28,12 @@ git clone https://github.com/Ks1220/budget_calculator_scala.git
 
 This program requires Flutter to be installed in your machine.
 
+By default, if you have any browser open, the command prompt will show the browser as the list of devices, however, this application can only run on Android devices. 
+
+Do note that if you did not have any android emulator,please install Android Studio from [here](https://developer.android.com/studio?gclid=Cj0KCQiAnuGNBhCPARIsACbnLzqa66HJFyZxvOYcarh5a3G8URjB49ZS2MlzrpxYF5bjKUl556jIqrwaAqAdEALw_wcB&gclsrc=aw.ds)
+
+[Here](https://www.youtube.com/watch?v=LgRRmgfrFQM) is another tutorial video of creating Android Emulator
+
 ## Usage <a name = "usage"></a>
 
 Run the command
@@ -35,9 +41,3 @@ Run the command
 ```bash
 flutter run
 ```
-
-By default, if you have any browser open, the command prompt will show the browser as the list of devices, however, this application can only run on Android devices. 
-
-Do note that if you did not have any android emulator,please install Android Studio from [here](https://developer.android.com/studio?gclid=Cj0KCQiAnuGNBhCPARIsACbnLzqa66HJFyZxvOYcarh5a3G8URjB49ZS2MlzrpxYF5bjKUl556jIqrwaAqAdEALw_wcB&gclsrc=aw.ds)
-
-[Here](https://www.youtube.com/watch?v=LgRRmgfrFQM) is another tutorial video of creating Android Emulator
