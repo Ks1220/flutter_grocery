@@ -24,11 +24,13 @@ class _StartState extends State<Start> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Image.asset('images/logo-name.png', fit: BoxFit.cover),
+          title: Image.asset('images/logo-name.png'),
           backgroundColor: new Color(0xffff),
-          shadowColor: new Color(0xffff),
+          shadowColor: Colors.transparent,
+          elevation: 0,
           toolbarHeight: 90.0,
         ),
+
         body: Container(
             child: Column(children: <Widget>[
           Container(
