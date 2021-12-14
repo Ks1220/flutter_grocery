@@ -49,64 +49,138 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     GoogleSignInAccount? user = _googleSignIn.currentUser;
+    final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                height: 200,
-                child: Image(
-                  image: AssetImage("images/login.png"),
+      resizeToAvoidBottomInset: false,
+      appBar: !isKeyboard ? AppBar(
+        titleSpacing: 12,
+        leading: ModalRoute.of(context)?.canPop == true
+            ? IconButton(
+                splashColor: Colors.transparent,
+                padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 35,
                 ),
+                onPressed: () => Navigator.of(context).pop(),
+                color: Colors.black,
+              )
+            : null,
+        title: Image.asset('images/logo-name.png'),
+        backgroundColor: new Color(0xffff),
+        shadowColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 90.0,
+      ) : null,
+      body: Center(
+        child: Column(
+          children: <Widget>[
+           if(!isKeyboard)Container(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text: "Made e-Groceries easier",
+                    style: TextStyle(
+                        fontSize: 37,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
               ),
-              Container(
-                  child: Form(
-                      key: _formKey,
-                      child: Column(children: [
-                        TextFormField(
-                            controller: _emailController,
-                            validator: (input) {
-                              if (input!.isEmpty) return 'Enter Email';
-                            },
-                            decoration: InputDecoration(
-                                labelText: "Email",
-                                prefixIcon: Icon(Icons.mail)),
-                            onSaved: (input) => _email = input!),
-                        TextFormField(
-                            controller: _passwordController,
-                            validator: (input) {
-                              if (input!.length < 6)
-                                return 'Provide minimum 6 character';
-                            },
-                            decoration: InputDecoration(
-                                labelText: "Password",
-                                prefixIcon: Icon(Icons.lock)),
-                            onSaved: (input) => _password = input!),
-                      ]))),
-              RaisedButton(
-                  padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      signInUser();
-                    }
-                  },
-                  child: Text('Login',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold))),
-              // SignInButton(
-              //   Buttons.Google,
-              //   onPressed: () async {
-              //     await _googleSignIn.signIn();
-              //     Navigator.push(
-              //       context, MaterialPageRoute(builder: (context) => HomePage()));
-              //   },
-              // )
-            ],
-          ),
+              width: 350,
+            ),
+
+            Container(
+              child: Image(
+                  image: AssetImage("images/login.png"), fit: BoxFit.contain),
+            ),
+
+            Container(
+                width: 350.0,
+                child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                  controller: _emailController,
+                                  validator: (input) {
+                                    if (input!.isEmpty) return 'Enter Email';
+                                  },
+                                  decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey)
+                                      ),
+                                      focusColor: Colors.grey,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey)
+                                      ),
+                                      labelStyle: TextStyle (color: Colors.grey),
+                                      labelText: "Email",
+                                      prefixIcon: Icon(
+                                        Icons.mail,
+                                        color: Colors.grey
+                                      ),
+                                  ),
+                                  onSaved: (input) => _email = input!),
+                              SizedBox(height:20),
+                              TextFormField(
+                                  controller: _passwordController,
+                                  validator: (input) {
+                                    if (input!.length < 6)
+                                      return 'Provide minimum 6 character';
+                                  },
+                                  decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey)
+                                      ),
+                                      focusColor: Colors.grey,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey)
+                                      ),
+                                      labelStyle: TextStyle (color: Colors.grey),
+                                      labelText: "Password",
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        color: Colors.grey
+                                      )
+                                  ),
+                                  onSaved: (input) => _password = input!),
+                            ])))),
+            SizedBox(height:20),
+            ButtonTheme(
+              buttonColor: Color(0xff2C6846),
+              minWidth: 350.0,
+              height: 60.0,
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(5.0),
+                ),
+                padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    signInUser();
+                  }
+                },
+                child: Text('Log In',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold))
+              ),
+            )
+            
+            // SignInButton(
+            //   Buttons.Google,
+            //   onPressed: () async {
+            //     await _googleSignIn.signIn();
+            //     Navigator.push(
+            //       context, MaterialPageRoute(builder: (context) => HomePage()));
+            //   },
+            // )
+          ],
         ),
       ),
     );
