@@ -8,6 +8,7 @@ Authors:
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
+- [Export APK](#export_apk)
  
  ## About <a name = "about"></a>
  
@@ -41,3 +42,12 @@ Run the command
 ```bash
 flutter run
 ```
+## Export APK <a name = "export_apk"></a>
+
+Run the command
+
+```bash
+flutter build apk --build-name=(your version number) --build-number(number sequence)
+```
+
+Once the application has been built, direct to ```flutter_grocery\build\app\outputs\flutter-apk``` and find for ```app-release.apk```
