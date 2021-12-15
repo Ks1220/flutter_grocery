@@ -46,48 +46,52 @@ class _LoginState extends State<Login> {
         });
   }
 
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     GoogleSignInAccount? user = _googleSignIn.currentUser;
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: !isKeyboard ? AppBar(
-        titleSpacing: 12,
-        leading: ModalRoute.of(context)?.canPop == true
-            ? IconButton(
-                splashColor: Colors.transparent,
-                padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 35,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-                color: Colors.black,
-              )
-            : null,
-        title: Image.asset('images/logo-name.png'),
-        backgroundColor: new Color(0xffff),
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        toolbarHeight: 90.0,
-      ) : null,
+      appBar: !isKeyboard
+          ? AppBar(
+              titleSpacing: 12,
+              leading: ModalRoute.of(context)?.canPop == true
+                  ? IconButton(
+                      splashColor: Colors.transparent,
+                      padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 35,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                      color: Colors.black,
+                    )
+                  : null,
+              title: Image.asset('images/logo-name.png'),
+              backgroundColor: new Color(0xffff),
+              shadowColor: Colors.transparent,
+              elevation: 0,
+              toolbarHeight: 90.0,
+            )
+          : null,
       body: Center(
         child: Column(
           children: <Widget>[
-           if(!isKeyboard)Container(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text: "Made e-Groceries easier",
-                    style: TextStyle(
-                        fontSize: 37,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
+            if (!isKeyboard)
+              Container(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      text: "Made e-Groceries easier",
+                      style: TextStyle(
+                          fontSize: 37,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black)),
+                ),
+                width: 350,
               ),
-              width: 350,
-            ),
 
             Container(
               child: Image(
@@ -102,76 +106,89 @@ class _LoginState extends State<Login> {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              TextFormField(
-                                  controller: _emailController,
-                                  validator: (input) {
-                                    if (input!.isEmpty) return 'Enter Email';
-                                  },
-                                  decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey)
-                                      ),
-                                      focusColor: Colors.grey,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey)
-                                      ),
-                                      labelStyle: TextStyle (color: Colors.grey),
-                                      labelText: "Email",
-                                      prefixIcon: Icon(
-                                        Icons.mail,
-                                        color: Colors.grey
-                                      ),
+                          TextFormField(
+                              controller: _emailController,
+                              validator: (input) {
+                                if (input!.isEmpty) return 'Enter Email';
+                              },
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xff2C6846))),
+                                focusColor: Color(0xff2C6846),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xff2C6846),
+                                    )
+                                ),
+                                labelStyle: TextStyle(color: Color(0xff2C6846)),
+                                labelText: "Email",
+                                prefixIcon:
+                                    Icon(Icons.mail, color: Color(0xff2C6846)),
+                              ),
+                              onSaved: (input) => _email = input!),
+                          SizedBox(height: 20),
+                          TextFormField(
+                              obscureText: _isObscure,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              controller: _passwordController,
+                              validator: (input) {
+                                if (input!.length < 6)
+                                  return 'Provide minimum 6 character';
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 20.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff2C6846))),
+                                  focusColor: Color(0xff2C6846),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff2C6846))),
+                                  labelStyle: TextStyle(color: Color(0xff2C6846)),
+                                  labelText: "Password",
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isObscure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Color(0xff2C6846),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isObscure = !_isObscure;
+                                      });
+                                    },
                                   ),
-                                  onSaved: (input) => _email = input!),
-                              SizedBox(height:20),
-                              TextFormField(
-                                  controller: _passwordController,
-                                  validator: (input) {
-                                    if (input!.length < 6)
-                                      return 'Provide minimum 6 character';
-                                  },
-                                  decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey)
-                                      ),
-                                      focusColor: Colors.grey,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey)
-                                      ),
-                                      labelStyle: TextStyle (color: Colors.grey),
-                                      labelText: "Password",
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Colors.grey
-                                      )
-                                  ),
-                                  onSaved: (input) => _password = input!),
-                            ])))),
-            SizedBox(height:20),
+                                  prefixIcon:
+                                      Icon(Icons.lock, color: Color(0xff2C6846))),
+                              onSaved: (input) => _password = input!),
+                        ])))),
+            SizedBox(height: 20),
             ButtonTheme(
               buttonColor: Color(0xff2C6846),
               minWidth: 350.0,
               height: 60.0,
               child: RaisedButton(
-                shape: RoundedRectangleBorder(
+                  shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(5.0),
-                ),
-                padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    signInUser();
-                  }
-                },
-                child: Text('Log In',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold))
-              ),
+                  ),
+                  padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      signInUser();
+                    }
+                  },
+                  child: Text('Log In',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold))),
             )
-            
+
             // SignInButton(
             //   Buttons.Google,
             //   onPressed: () async {
