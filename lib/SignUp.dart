@@ -1,7 +1,10 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grocery/AuthService.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_grocery/Start.dart';
 // import 'package:flutter_grocery/provider/GoogleSignInProvider.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 // import 'package:provider/provider.dart';
@@ -16,6 +19,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final AuthService _auth = AuthService();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _nameController = TextEditingController();
@@ -28,7 +32,6 @@ class _SignUpState extends State<SignUp> {
   void initState() {
     super.initState();
   }
-
 
   showError(String errormessage) {
     showDialog(
@@ -91,7 +94,17 @@ class _SignUpState extends State<SignUp> {
             padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                createUser();
+                _firebaseAuth
+                    .createUserWithEmailAndPassword(
+                        email: _emailController.text,
+                        password: _passwordController.text)
+                    .then((value) {
+                  FirebaseFirestore.instance
+                      .collection('UserData')
+                      .doc(value.user!.uid)
+                      .set({"email": value.user!.email, "name": _nameController.text});
+                });
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
               }
             },
             child: Text('SignUp',
@@ -117,18 +130,4 @@ class _SignUpState extends State<SignUp> {
     ));
   }
 
-  void createUser() async {
-    dynamic result = await _auth.createNewUser(
-        _emailController.text.trim(), _passwordController.text);
-    if (result == null) {
-      print('Email is not valid');
-    } else {
-      print(result.toString());
-      _nameController.clear();
-      _passwordController.clear();
-      _emailController.clear();
-      Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-    }
-  }
 }
