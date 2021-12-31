@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -6,12 +9,12 @@ import 'SignUp.dart';
 
 class Start extends StatefulWidget {
   const Start({Key? key}) : super(key: key);
-
   @override
   _StartState createState() => _StartState();
 }
 
 class _StartState extends State<Start> {
+
   navigateToLogin() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
   }
@@ -22,6 +25,7 @@ class _StartState extends State<Start> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
         appBar: AppBar(
           title: Image.asset('images/logo-name.png'),
@@ -30,8 +34,7 @@ class _StartState extends State<Start> {
           elevation: 0,
           toolbarHeight: 90.0,
         ),
-
-        body: Container(
+        body: Center(
             child: Column(children: <Widget>[
           Container(
             child: RichText(
@@ -39,20 +42,17 @@ class _StartState extends State<Start> {
               text: TextSpan(
                   text: "Made e-Groceries easier",
                   style: TextStyle(
-                      fontSize: 37,
+                      fontSize: mediaQueryData.textScaleFactor/mediaQueryData.textScaleFactor*33,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w600,
                       color: Colors.black)),
             ),
-            width: 350,
+            width: mediaQueryData.size.width * 0.8,
           ),
-
           Container(
               child: Image(
                   image: AssetImage("images/login.png"), fit: BoxFit.contain)),
-
           SizedBox(height: 20.0),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -60,7 +60,7 @@ class _StartState extends State<Start> {
                 children: <Widget>[
                   Container(
                     child: ButtonTheme(
-                      minWidth: 337.0,
+                      minWidth: mediaQueryData.size.width * 0.82,
                       height: 53.0,
                       child: RaisedButton(
                           onPressed: navigateToLogin,
@@ -83,7 +83,7 @@ class _StartState extends State<Start> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                     child: ButtonTheme(
-                      minWidth: 337.0,
+                      minWidth: mediaQueryData.size.width * 0.82,
                       height: 53.0,
                       child: RaisedButton(
                         onPressed: navigateToSignup,
@@ -103,9 +103,7 @@ class _StartState extends State<Start> {
               ),
             ],
           ),
-
           SizedBox(height: 40.0),
-
           Container(
             child: RichText(
               textAlign: TextAlign.center,
@@ -113,10 +111,13 @@ class _StartState extends State<Start> {
                   text:
                       "By signing in, you agree to our Terms of Service and Privacy Policy",
                   style: TextStyle(
-                      fontSize: 13, fontFamily: 'Roboto', color: Colors.black)),
+                      fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
             ),
             width: 300,
           ),
         ])));
   }
+
+  @override
+  noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

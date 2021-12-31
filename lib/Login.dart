@@ -49,6 +49,7 @@ class _LoginState extends State<Login> {
   bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     GoogleSignInAccount? user = _googleSignIn.currentUser;
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
@@ -85,12 +86,12 @@ class _LoginState extends State<Login> {
                   text: TextSpan(
                       text: "Made e-Groceries easier",
                       style: TextStyle(
-                          fontSize: 37,
+                          fontSize: mediaQueryData.textScaleFactor/mediaQueryData.textScaleFactor*33,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
                           color: Colors.black)),
                 ),
-                width: 350,
+                width: mediaQueryData.size.width * 0.8,
               ),
 
             Container(
@@ -99,7 +100,7 @@ class _LoginState extends State<Login> {
             ),
 
             Container(
-                width: 350.0,
+                width: mediaQueryData.size.width*0.85,
                 child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -170,7 +171,7 @@ class _LoginState extends State<Login> {
             SizedBox(height: 20),
             ButtonTheme(
               buttonColor: Color(0xff2C6846),
-              minWidth: 350.0,
+              minWidth: mediaQueryData.size.width*0.85,
               height: 60.0,
               child: RaisedButton(
                   shape: RoundedRectangleBorder(
@@ -186,7 +187,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
-                          fontWeight: FontWeight.bold))),
+                          fontWeight: FontWeight.w600))),
             )
 
             // SignInButton(
