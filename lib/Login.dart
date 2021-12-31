@@ -110,9 +110,16 @@ class _LoginState extends State<Login> {
                           TextFormField(
                               controller: _emailController,
                               validator: (input) {
-                                if (input!.isEmpty) return 'Enter Email';
+                                if (input!.isEmpty) return 'Pleas enter a valid Email';
                               },
                               decoration: InputDecoration(
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                errorStyle: TextStyle(height: 0.4),
                                 contentPadding:
                                     const EdgeInsets.symmetric(vertical: 20.0),
                                 enabledBorder: OutlineInputBorder(
@@ -140,6 +147,13 @@ class _LoginState extends State<Login> {
                                   return 'Provide minimum 6 character';
                               },
                               decoration: InputDecoration(
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                errorStyle: TextStyle(height: 0.4),
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 20.0),
                                   enabledBorder: OutlineInputBorder(
