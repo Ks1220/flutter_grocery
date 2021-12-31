@@ -52,7 +52,8 @@ class _SignUpState extends State<SignUp> {
         });
   }
 
-  bool _isObscure = true;
+  bool _isObscure1 = true;
+  bool _isObscure2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -121,9 +122,16 @@ class _SignUpState extends State<SignUp> {
                   TextFormField(
                       controller: _nameController,
                       validator: (input) {
-                        if (input!.isEmpty) return 'Enter Name';
+                        if (input!.isEmpty) return 'Please enter a Name';
                       },
                       decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorStyle: TextStyle(height: 0.4),
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20.0),
                           enabledBorder: OutlineInputBorder(
@@ -142,9 +150,16 @@ class _SignUpState extends State<SignUp> {
                   TextFormField(
                       controller: _emailController,
                       validator: (input) {
-                        if (input!.isEmpty) return 'Enter Email';
+                        if (input!.isEmpty) return 'Pleas enter an Email';
                       },
                       decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorStyle: TextStyle(height: 0.4),
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20.0),
                           enabledBorder: OutlineInputBorder(
@@ -161,13 +176,20 @@ class _SignUpState extends State<SignUp> {
                       onSaved: (input) => _name = input!),
                   SizedBox(height: 25),
                   TextFormField(
-                      obscureText: _isObscure,
+                      obscureText: _isObscure1,
                       controller: _passwordController,
                       validator: (input) {
                         if (input!.length < 6)
                           return 'Provide minimum 6 character';
                       },
                       decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorStyle: TextStyle(height: 0.4),
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20.0),
                           enabledBorder: OutlineInputBorder(
@@ -181,14 +203,14 @@ class _SignUpState extends State<SignUp> {
                           labelText: "Password",
                           suffixIcon: IconButton(
                                     icon: Icon(
-                                      _isObscure
+                                      _isObscure1
                                           ? Icons.visibility
                                           : Icons.visibility_off,
                                       color: Color(0xff2C6846),
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        _isObscure = !_isObscure;
+                                        _isObscure1 = !_isObscure1;
                                       });
                                     },
                                   ),
@@ -199,6 +221,7 @@ class _SignUpState extends State<SignUp> {
                       onSaved: (input) => _password = input!),
                   SizedBox(height: 25),
                   TextFormField(
+                      obscureText: _isObscure2,
                       controller: _confirmPasswordController,
                       validator: (input) {
                         if (input!.length < 6)
@@ -207,6 +230,13 @@ class _SignUpState extends State<SignUp> {
                           return 'Password not match';
                       },
                       decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorStyle: TextStyle(height: 0.4),
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20.0),
                           enabledBorder: OutlineInputBorder(
@@ -218,9 +248,21 @@ class _SignUpState extends State<SignUp> {
                           )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
                           labelText: "Confirm Password",
+                          suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isObscure2
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Color(0xff2C6846),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isObscure2 = !_isObscure2;
+                                      });
+                                    },
+                                  ),
                           prefixIcon:
                               Icon(Icons.vpn_key, color: Color(0xff2C6846))),
-                      obscureText: true,
                       onSaved: (input) => _password = input!),
                 ])),
           ),
@@ -263,17 +305,18 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
           SizedBox(height: 10.0),
-          Container(
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                  text:
-                      "By signing in, you agree to our Terms of Service and Privacy Policy",
-                  style: TextStyle(
-                      fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
+          if(!isKeyboard)
+            Container(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text:
+                        "By signing in, you agree to our Terms of Service and Privacy Policy",
+                    style: TextStyle(
+                        fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
+              ),
+              width: 300,
             ),
-            width: 300,
-          ),
           // SignInButton(
           //       Buttons.Google,
           //       onPressed: () {
