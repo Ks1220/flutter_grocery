@@ -52,6 +52,8 @@ class _SignUpState extends State<SignUp> {
         });
   }
 
+  bool _isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -83,6 +85,7 @@ class _SignUpState extends State<SignUp> {
           child: Column(
         children: <Widget>[
           if (!isKeyboard) SizedBox(height: 15.0),
+          if(!isKeyboard)
             Container(
               child: RichText(
                 textAlign: TextAlign.left,
@@ -96,19 +99,19 @@ class _SignUpState extends State<SignUp> {
               ),
               width: mediaQueryData.size.width * 0.85,
             ),
-            Container(
-              child: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                    text: "Create an account to start ordering",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black)),
-              ),
-              width: mediaQueryData.size.width * 0.85,
+          Container(
+            child: RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                  text: "Create an account to start ordering",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black)),
             ),
+            width: mediaQueryData.size.width * 0.85,
+          ),
           SizedBox(height: 50),
           Container(
             width: mediaQueryData.size.width * 0.85,
@@ -158,6 +161,7 @@ class _SignUpState extends State<SignUp> {
                       onSaved: (input) => _name = input!),
                   SizedBox(height: 25),
                   TextFormField(
+                      obscureText: _isObscure,
                       controller: _passwordController,
                       validator: (input) {
                         if (input!.length < 6)
@@ -175,9 +179,23 @@ class _SignUpState extends State<SignUp> {
                           )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
                           labelText: "Password",
+                          suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isObscure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Color(0xff2C6846),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isObscure = !_isObscure;
+                                      });
+                                    },
+                                  ),
                           prefixIcon:
-                              Icon(Icons.lock, color: Color(0xff2C6846))),
-                      obscureText: true,
+                              Icon(Icons.lock, color: Color(0xff2C6846))
+                          ),
+
                       onSaved: (input) => _password = input!),
                   SizedBox(height: 25),
                   TextFormField(
