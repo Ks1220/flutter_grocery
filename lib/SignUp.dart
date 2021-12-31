@@ -25,6 +25,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
   late String _email, _password, _name, _confirmpass;
 
@@ -79,40 +80,39 @@ class _SignUpState extends State<SignUp> {
             )
           : null,
       body: Center(
-        child: Column(
-          children: <Widget>[
-            if (!isKeyboard)
-              SizedBox(height: 15.0),
-              Container(
-                  child: RichText(
-                    textAlign: TextAlign.left,
-                    text: TextSpan(
-                        text: "Get Started",
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black)),
-                  ),
-                  width: mediaQueryData.size.width * 0.85,
-              ),
-              Container(
-                  child: RichText(
-                    textAlign: TextAlign.left,
-                    text: TextSpan(
-                        text: "Create an account to start ordering",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black)),
-                  ),
-                  width: mediaQueryData.size.width * 0.85,
-              ),
-            SizedBox(height:70),
+          child: Column(
+        children: <Widget>[
+          if (!isKeyboard) SizedBox(height: 15.0),
             Container(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                    text: "Get Started",
+                    style: TextStyle(
+                        fontSize: 26,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
+              ),
               width: mediaQueryData.size.width * 0.85,
-              child: Form(
+            ),
+            Container(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                    text: "Create an account to start ordering",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black)),
+              ),
+              width: mediaQueryData.size.width * 0.85,
+            ),
+          SizedBox(height: 50),
+          Container(
+            width: mediaQueryData.size.width * 0.85,
+            child: Form(
                 key: _formKey,
                 child: Column(children: [
                   TextFormField(
@@ -128,13 +128,12 @@ class _SignUpState extends State<SignUp> {
                           focusColor: Color(0xff2C6846),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0xff2C6846),
-                              )
-                          ),
+                            color: Color(0xff2C6846),
+                          )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Full Name", 
-                          prefixIcon: Icon(Icons.person, color: Color(0xff2C6846))
-                      ),
+                          labelText: "Full Name",
+                          prefixIcon:
+                              Icon(Icons.person, color: Color(0xff2C6846))),
                       onSaved: (input) => _name = input!),
                   SizedBox(height: 25),
                   TextFormField(
@@ -150,13 +149,12 @@ class _SignUpState extends State<SignUp> {
                           focusColor: Color(0xff2C6846),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0xff2C6846),
-                              )
-                          ),
+                            color: Color(0xff2C6846),
+                          )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Email", 
-                          prefixIcon: Icon(Icons.mail, color: Color(0xff2C6846))
-                      ),
+                          labelText: "Email",
+                          prefixIcon:
+                              Icon(Icons.mail, color: Color(0xff2C6846))),
                       onSaved: (input) => _name = input!),
                   SizedBox(height: 25),
                   TextFormField(
@@ -173,21 +171,22 @@ class _SignUpState extends State<SignUp> {
                           focusColor: Color(0xff2C6846),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0xff2C6846),
-                              )
-                          ),
+                            color: Color(0xff2C6846),
+                          )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Password", 
-                          prefixIcon: Icon(Icons.lock, color: Color(0xff2C6846))
-                      ),
+                          labelText: "Password",
+                          prefixIcon:
+                              Icon(Icons.lock, color: Color(0xff2C6846))),
                       obscureText: true,
                       onSaved: (input) => _password = input!),
                   SizedBox(height: 25),
                   TextFormField(
-                      controller: _passwordController,
+                      controller: _confirmPasswordController,
                       validator: (input) {
                         if (input!.length < 6)
                           return 'Provide minimum 6 character';
+                        if (input != _passwordController.text)
+                          return 'Password not match';
                       },
                       decoration: InputDecoration(
                           contentPadding:
@@ -197,61 +196,66 @@ class _SignUpState extends State<SignUp> {
                           focusColor: Color(0xff2C6846),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0xff2C6846),
-                              )
-                          ),
+                            color: Color(0xff2C6846),
+                          )),
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Confirm Password", 
-                          prefixIcon: Icon(Icons.vpn_key, color: Color(0xff2C6846))
-                      ),
+                          labelText: "Confirm Password",
+                          prefixIcon:
+                              Icon(Icons.vpn_key, color: Color(0xff2C6846))),
                       obscureText: true,
                       onSaved: (input) => _password = input!),
                 ])),
-            ),
-            SizedBox(height: 30),
-            ButtonTheme(
-              buttonColor: Color(0xff2C6846),
-              minWidth: mediaQueryData.size.width * 0.85,
-              height: 60.0,
-              child: RaisedButton(
-                  padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(5.0),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _firebaseAuth
-                          .createUserWithEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text)
-                          .then((value) {
-                        FirebaseFirestore.instance
-                            .collection('UserData')
-                            .doc(value.user!.uid)
-                            .set({"email": value.user!.email, "name": _nameController.text});
-                      });
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-                    }
-                  },
-                  child: Text('Sign Up',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600)),
+          ),
+          SizedBox(height: 30),
+          ButtonTheme(
+            buttonColor: Color(0xff2C6846),
+            minWidth: mediaQueryData.size.width * 0.85,
+            height: 60.0,
+            child: RaisedButton(
+              padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(5.0),
               ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _firebaseAuth
+                      .createUserWithEmailAndPassword(
+                          email: _emailController.text,
+                          password: _passwordController.text)
+                      .then((value) {
+                    FirebaseFirestore.instance
+                        .collection('UserData')
+                        .doc(value.user!.uid)
+                        .set({
+                      "email": value.user!.email,
+                      "name": _nameController.text
+                    });
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomePage()));
+                }
+              },
+              child: Text('Sign Up',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600)),
             ),
-            SizedBox(height: 40.0),
-            Container(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text:
-                        "By signing in, you agree to our Terms of Service and Privacy Policy",
-                    style: TextStyle(
-                        fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
-              ),
-              width: 300,
+          ),
+          SizedBox(height: 10.0),
+          Container(
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text:
+                      "By signing in, you agree to our Terms of Service and Privacy Policy",
+                  style: TextStyle(
+                      fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
             ),
+            width: 300,
+          ),
           // SignInButton(
           //       Buttons.Google,
           //       onPressed: () {
@@ -264,5 +268,4 @@ class _SignUpState extends State<SignUp> {
       )),
     );
   }
-
 }
