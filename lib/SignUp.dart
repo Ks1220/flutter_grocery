@@ -1,5 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_grocery/AuthService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +40,7 @@ class _SignUpState extends State<SignUp> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('ERROR'),
+            title: Text('Note'),
             content: Text(errormessage),
             actions: <Widget>[
               FlatButton(
@@ -86,7 +87,7 @@ class _SignUpState extends State<SignUp> {
           child: Column(
         children: <Widget>[
           if (!isKeyboard) SizedBox(height: 15.0),
-          if(!isKeyboard)
+          if (!isKeyboard)
             Container(
               child: RichText(
                 textAlign: TextAlign.left,
@@ -202,67 +203,65 @@ class _SignUpState extends State<SignUp> {
                           labelStyle: TextStyle(color: Color(0xff2C6846)),
                           labelText: "Password",
                           suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isObscure1
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: Color(0xff2C6846),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscure1 = !_isObscure1;
-                                      });
-                                    },
-                                  ),
-                          prefixIcon:
-                              Icon(Icons.lock, color: Color(0xff2C6846))
+                            icon: Icon(
+                              _isObscure1
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Color(0xff2C6846),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscure1 = !_isObscure1;
+                              });
+                            },
                           ),
-
+                          prefixIcon:
+                              Icon(Icons.lock, color: Color(0xff2C6846))),
                       onSaved: (input) => _password = input!),
                   SizedBox(height: 25),
                   TextFormField(
-                      obscureText: _isObscure2,
-                      controller: _confirmPasswordController,
-                      validator: (input) {
-                        if (input!.length < 6)
-                          return 'Provide minimum 6 character';
-                        if (input != _passwordController.text)
-                          return 'Password not match';
-                      },
-                      decoration: InputDecoration(
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorStyle: TextStyle(height: 0.4),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff2C6846))),
-                          focusColor: Color(0xff2C6846),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                    obscureText: _isObscure2,
+                    controller: _confirmPasswordController,
+                    validator: (input) {
+                      if (input!.length < 6)
+                        return 'Provide minimum 6 character';
+                      if (input != _passwordController.text)
+                        return 'Password not match';
+                    },
+                    decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: TextStyle(height: 0.4),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20.0),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff2C6846))),
+                        focusColor: Color(0xff2C6846),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff2C6846),
+                        )),
+                        labelStyle: TextStyle(color: Color(0xff2C6846)),
+                        labelText: "Confirm Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscure2
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Color(0xff2C6846),
-                          )),
-                          labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Confirm Password",
-                          suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isObscure2
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: Color(0xff2C6846),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscure2 = !_isObscure2;
-                                      });
-                                    },
-                                  ),
-                          prefixIcon:
-                              Icon(Icons.vpn_key, color: Color(0xff2C6846))),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure2 = !_isObscure2;
+                            });
+                          },
+                        ),
+                        prefixIcon:
+                            Icon(Icons.vpn_key, color: Color(0xff2C6846))),
                   ),
                 ])),
           ),
@@ -276,20 +275,26 @@ class _SignUpState extends State<SignUp> {
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(5.0),
               ),
-              onPressed: () {
+              onPressed: () async{
                 if (_formKey.currentState!.validate()) {
-                  _firebaseAuth
-                      .createUserWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text)
-                      .then((value) {
-                    FirebaseFirestore.instance
-                        .collection('UserData')
-                        .doc(value.user!.uid)
-                        .set({
-                      "email": value.user!.email,
-                      "name": _nameController.text
-                    });
+                  var user; 
+                  try {
+                    user = await _firebaseAuth.createUserWithEmailAndPassword(
+                        email: _emailController.text,
+                        password: _passwordController.text);
+                  } on FirebaseAuthException catch (error) {
+                      switch (error.code) {
+                        case "email-already-in-use":
+                          showError(context,  "Email already used. Go to login page.");
+                          break;
+                      }
+                  }
+                  FirebaseFirestore.instance
+                      .collection('UserData')
+                      .doc(user.user!.uid)
+                      .set({
+                        "email": user.user!.email,
+                        "name": _nameController.text
                   });
                   Navigator.push(
                       context,
@@ -305,7 +310,7 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
           SizedBox(height: 10.0),
-          if(!isKeyboard)
+          if (!isKeyboard)
             Container(
               child: RichText(
                 textAlign: TextAlign.center,
@@ -313,7 +318,9 @@ class _SignUpState extends State<SignUp> {
                     text:
                         "By signing in, you agree to our Terms of Service and Privacy Policy",
                     style: TextStyle(
-                        fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
+                        fontSize: 11,
+                        fontFamily: 'Roboto',
+                        color: Colors.black)),
               ),
               width: 300,
             ),
