@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_grocery/AuthService.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,27 +23,11 @@ class _LoginState extends State<Login> {
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   late String _email, _password;
+  String error = "";
 
   @override
   void initState() {
     super.initState();
-  }
-
-  showError(String errormessage) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text('Error'),
-              content: Text(errormessage),
-              actions: <Widget>[
-                FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'))
-              ]);
-        });
   }
 
   bool _isObscure = true;
@@ -86,7 +70,9 @@ class _LoginState extends State<Login> {
                   text: TextSpan(
                       text: "Made e-Groceries easier",
                       style: TextStyle(
-                          fontSize: mediaQueryData.textScaleFactor/mediaQueryData.textScaleFactor*33,
+                          fontSize: mediaQueryData.textScaleFactor /
+                              mediaQueryData.textScaleFactor *
+                              33,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
                           color: Colors.black)),
@@ -100,7 +86,7 @@ class _LoginState extends State<Login> {
             ),
 
             Container(
-                width: mediaQueryData.size.width*0.85,
+                width: mediaQueryData.size.width * 0.85,
                 child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -110,7 +96,8 @@ class _LoginState extends State<Login> {
                           TextFormField(
                               controller: _emailController,
                               validator: (input) {
-                                if (input!.isEmpty) return 'Pleas enter a valid Email';
+                                if (input!.isEmpty)
+                                  return 'Pleas enter a valid Email';
                               },
                               decoration: InputDecoration(
                                 focusedErrorBorder: OutlineInputBorder(
@@ -123,13 +110,13 @@ class _LoginState extends State<Login> {
                                 contentPadding:
                                     const EdgeInsets.symmetric(vertical: 20.0),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Color(0xff2C6846))),
+                                    borderSide:
+                                        BorderSide(color: Color(0xff2C6846))),
                                 focusColor: Color(0xff2C6846),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xff2C6846),
-                                    )
-                                ),
+                                  color: Color(0xff2C6846),
+                                )),
                                 labelStyle: TextStyle(color: Color(0xff2C6846)),
                                 labelText: "Email",
                                 prefixIcon:
@@ -147,13 +134,13 @@ class _LoginState extends State<Login> {
                                   return 'Provide minimum 6 character';
                               },
                               decoration: InputDecoration(
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.red),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.red),
-                                ),
-                                errorStyle: TextStyle(height: 0.4),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.red),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.red),
+                                  ),
+                                  errorStyle: TextStyle(height: 0.4),
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 20.0),
                                   enabledBorder: OutlineInputBorder(
@@ -163,7 +150,8 @@ class _LoginState extends State<Login> {
                                   focusedBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xff2C6846))),
-                                  labelStyle: TextStyle(color: Color(0xff2C6846)),
+                                  labelStyle:
+                                      TextStyle(color: Color(0xff2C6846)),
                                   labelText: "Password",
                                   suffixIcon: IconButton(
                                     icon: Icon(
@@ -178,14 +166,14 @@ class _LoginState extends State<Login> {
                                       });
                                     },
                                   ),
-                                  prefixIcon:
-                                      Icon(Icons.lock, color: Color(0xff2C6846))),
+                                  prefixIcon: Icon(Icons.lock,
+                                      color: Color(0xff2C6846))),
                               onSaved: (input) => _password = input!),
                         ])))),
             SizedBox(height: 20),
             ButtonTheme(
               buttonColor: Color(0xff2C6846),
-              minWidth: mediaQueryData.size.width*0.85,
+              minWidth: mediaQueryData.size.width * 0.85,
               height: 60.0,
               child: RaisedButton(
                   shape: RoundedRectangleBorder(
@@ -220,7 +208,7 @@ class _LoginState extends State<Login> {
 
   void signInUser() async {
     dynamic authResult = await _auth.loginUser(
-        _emailController.text.trim(), _passwordController.text);
+        context, _emailController.text, _passwordController.text);
     if (authResult == null) {
       print("Sign in error. Could not be able to login");
     } else {
