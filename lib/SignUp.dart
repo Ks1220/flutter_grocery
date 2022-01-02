@@ -34,7 +34,7 @@ class _SignUpState extends State<SignUp> {
     super.initState();
   }
 
-  showError(String errormessage) {
+  showError(BuildContext context, String errormessage) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -263,7 +263,7 @@ class _SignUpState extends State<SignUp> {
                                   ),
                           prefixIcon:
                               Icon(Icons.vpn_key, color: Color(0xff2C6846))),
-                      onSaved: (input) => _password = input!),
+                  ),
                 ])),
           ),
           SizedBox(height: 30),
