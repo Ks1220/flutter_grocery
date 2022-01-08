@@ -14,7 +14,6 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-
   navigateToLogin() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
   }
@@ -42,7 +41,9 @@ class _StartState extends State<Start> {
               text: TextSpan(
                   text: "Made e-Groceries easier",
                   style: TextStyle(
-                      fontSize: mediaQueryData.textScaleFactor/mediaQueryData.textScaleFactor*33,
+                      fontSize: mediaQueryData.textScaleFactor /
+                          mediaQueryData.textScaleFactor *
+                          33,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w600,
                       color: Colors.black)),

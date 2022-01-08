@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_grocery/Start.dart';
+import 'package:flutter_grocery/Verify.dart';
 // import 'package:flutter_grocery/provider/GoogleSignInProvider.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 // import 'package:provider/provider.dart';
@@ -275,31 +276,33 @@ class _SignUpState extends State<SignUp> {
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(5.0),
               ),
-              onPressed: () async{
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  var user; 
+                  var user;
                   try {
                     user = await _firebaseAuth.createUserWithEmailAndPassword(
                         email: _emailController.text,
                         password: _passwordController.text);
                   } on FirebaseAuthException catch (error) {
-                      switch (error.code) {
-                        case "email-already-in-use":
-                          showError(context,  "Email already used. Go to login page.");
-                          break;
-                      }
+                    switch (error.code) {
+                      case "email-already-in-use":
+                        showError(
+                            context, "Email already used. Go to login page.");
+                        break;
+                    }
                   }
                   FirebaseFirestore.instance
                       .collection('UserData')
                       .doc(user.user!.uid)
                       .set({
-                        "email": user.user!.email,
-                        "name": _nameController.text
+                    "email": user.user!.email,
+                    "name": _nameController.text,
+                    "isMerchant": true
                   });
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage()));
+                          builder: (BuildContext context) => verify()));
                 }
               },
               child: Text('Sign Up',

@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'HomePage.dart';
 
 class Login extends StatefulWidget {
-
   @override
   _LoginState createState() => _LoginState();
 }

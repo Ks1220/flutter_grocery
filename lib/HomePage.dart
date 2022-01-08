@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+        body: Container(
       child: !isLoggedin
           ? CircularProgressIndicator()
           : Column(
@@ -81,7 +81,9 @@ class _HomePageState extends State<HomePage> {
                     )),
                 Container(
                   child: Text(
-                      (userProfilesList.length > 0 ? "Hello ${userProfilesList[0]['name']} you are Logged in as ${user.email}": ""),
+                      (userProfilesList.length > 0
+                          ? "Hello ${userProfilesList[0]['name']} you are Logged in as ${user.email}"
+                          : ""),
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold)),
                 ),

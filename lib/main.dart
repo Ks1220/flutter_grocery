@@ -6,7 +6,6 @@ import 'SignUp.dart';
 import 'Start.dart';
 import 'Login.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
