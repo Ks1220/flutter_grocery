@@ -30,6 +30,7 @@ class _StartState extends State<Start> {
           title: Image.asset('images/logo-name.png'),
           backgroundColor: new Color(0xffff),
           shadowColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           elevation: 0,
           toolbarHeight: 90.0,
         ),
