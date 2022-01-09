@@ -1,4 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_grocery/AuthService.dart';
@@ -36,22 +37,29 @@ class _SignUpState extends State<SignUp> {
     super.initState();
   }
 
-  showError(BuildContext context, String errormessage) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Note'),
-            content: Text(errormessage),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'))
-            ],
-          );
-        });
+  showError(BuildContext context, Object errormessage) {
+    showFlash(
+      context: context,
+      duration: const Duration(seconds: 5),
+      builder: (context, controller) {
+        return Flash.bar(
+          margin: const EdgeInsets.fromLTRB(1.0, 0.0, 1.0, 0.0),
+          controller: controller,
+          backgroundColor: Colors.red,
+          position: FlashPosition.top,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(75.0, 20.0, 75.0, 20.0),
+            child: Text(
+              errormessage.toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   bool _isObscure1 = true;
@@ -302,7 +310,7 @@ class _SignUpState extends State<SignUp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => verify()));
+                          builder: (BuildContext context) => Verify()));
                 }
               },
               child: Text('Sign Up',

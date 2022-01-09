@@ -1,29 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flash/flash.dart';
 import 'dart:developer';
 
 import 'Logging.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   showError(BuildContext context, Object errormessage) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Note'),
-            content: Text(errormessage.toString()),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'))
-            ],
-          );
-        });
+    showFlash(
+      context: context,
+      duration: const Duration(seconds: 5),
+      builder: (context, controller) {
+        return Flash.bar(
+          margin: const EdgeInsets.fromLTRB(1.0, 0.0, 1.0, 0.0),
+          controller: controller,
+          backgroundColor: Colors.red,
+          position: FlashPosition.top,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(75.0, 20.0, 75.0, 20.0),
+            child: Text(
+              errormessage.toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   //Login
