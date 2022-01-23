@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_grocery/Registered.dart';
-
-import 'HomePage.dart';
 
 class Verify extends StatefulWidget {
   const Verify({Key? key}) : super(key: key);
