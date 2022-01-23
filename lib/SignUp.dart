@@ -7,11 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_grocery/Start.dart';
-import 'package:flutter_grocery/Verify.dart';
-// import 'package:flutter_grocery/provider/GoogleSignInProvider.dart';
-// import 'package:flutter_signin_button/flutter_signin_button.dart';
-// import 'package:provider/provider.dart';
-import 'HomePage.dart';
+import 'package:flutter_grocery/StoreDetails.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -29,8 +25,6 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
-
-  late String _email, _password, _name, _confirmpass;
 
   @override
   void initState() {
@@ -130,103 +124,101 @@ class _SignUpState extends State<SignUp> {
                 key: _formKey,
                 child: Column(children: [
                   TextFormField(
-                      controller: _nameController,
-                      validator: (input) {
-                        if (input!.isEmpty) return 'Please enter a Name';
-                      },
-                      decoration: InputDecoration(
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorStyle: TextStyle(height: 0.4),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff2C6846))),
-                          focusColor: Color(0xff2C6846),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Color(0xff2C6846),
-                          )),
-                          labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Full Name",
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xff2C6846))),
-                      onSaved: (input) => _name = input!),
+                    controller: _nameController,
+                    validator: (input) {
+                      if (input!.isEmpty) return 'Please enter a Name';
+                    },
+                    decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: TextStyle(height: 0.4),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20.0),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff2C6846))),
+                        focusColor: Color(0xff2C6846),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff2C6846),
+                        )),
+                        labelStyle: TextStyle(color: Color(0xff2C6846)),
+                        labelText: "Full Name",
+                        prefixIcon:
+                            Icon(Icons.person, color: Color(0xff2C6846))),
+                  ),
                   SizedBox(height: 25),
                   TextFormField(
-                      controller: _emailController,
-                      validator: (input) {
-                        if (input!.isEmpty) return 'Pleas enter an Email';
-                      },
-                      decoration: InputDecoration(
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorStyle: TextStyle(height: 0.4),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff2C6846))),
-                          focusColor: Color(0xff2C6846),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Color(0xff2C6846),
-                          )),
-                          labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Email",
-                          prefixIcon:
-                              Icon(Icons.mail, color: Color(0xff2C6846))),
-                      onSaved: (input) => _name = input!),
+                    controller: _emailController,
+                    validator: (input) {
+                      if (input!.isEmpty) return 'Pleas enter an Email';
+                    },
+                    decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: TextStyle(height: 0.4),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20.0),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff2C6846))),
+                        focusColor: Color(0xff2C6846),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff2C6846),
+                        )),
+                        labelStyle: TextStyle(color: Color(0xff2C6846)),
+                        labelText: "Email",
+                        prefixIcon: Icon(Icons.mail, color: Color(0xff2C6846))),
+                  ),
                   SizedBox(height: 25),
                   TextFormField(
-                      obscureText: _isObscure1,
-                      controller: _passwordController,
-                      validator: (input) {
-                        if (input!.length < 6)
-                          return 'Provide minimum 6 character';
-                      },
-                      decoration: InputDecoration(
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorStyle: TextStyle(height: 0.4),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff2C6846))),
-                          focusColor: Color(0xff2C6846),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                    obscureText: _isObscure1,
+                    controller: _passwordController,
+                    validator: (input) {
+                      if (input!.length < 6)
+                        return 'Provide minimum 6 character';
+                    },
+                    decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: TextStyle(height: 0.4),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20.0),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff2C6846))),
+                        focusColor: Color(0xff2C6846),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff2C6846),
+                        )),
+                        labelStyle: TextStyle(color: Color(0xff2C6846)),
+                        labelText: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscure1
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Color(0xff2C6846),
-                          )),
-                          labelStyle: TextStyle(color: Color(0xff2C6846)),
-                          labelText: "Password",
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isObscure1
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Color(0xff2C6846),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isObscure1 = !_isObscure1;
-                              });
-                            },
                           ),
-                          prefixIcon:
-                              Icon(Icons.lock, color: Color(0xff2C6846))),
-                      onSaved: (input) => _password = input!),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure1 = !_isObscure1;
+                            });
+                          },
+                        ),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xff2C6846))),
+                  ),
                   SizedBox(height: 25),
                   TextFormField(
                     obscureText: _isObscure2,
@@ -284,57 +276,21 @@ class _SignUpState extends State<SignUp> {
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(5.0),
               ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  var user;
-                  try {
-                    user = await _firebaseAuth.createUserWithEmailAndPassword(
-                        email: _emailController.text,
-                        password: _passwordController.text);
-                  } on FirebaseAuthException catch (error) {
-                    switch (error.code) {
-                      case "email-already-in-use":
-                        showError(
-                            context, "Email already used. Go to login page.");
-                        break;
-                    }
-                  }
-                  FirebaseFirestore.instance
-                      .collection('UserData')
-                      .doc(user.user!.uid)
-                      .set({
-                    "email": user.user!.email,
-                    "name": _nameController.text,
-                    "isMerchant": true
-                  });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Verify()));
-                }
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => StoreDetails(
+                        _nameController,
+                        _emailController,
+                        _passwordController,
+                        _confirmPasswordController)));
               },
-              child: Text('Sign Up',
+              child: Text('Next',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontWeight: FontWeight.w600)),
             ),
           ),
-          SizedBox(height: 10.0),
-          if (!isKeyboard)
-            Container(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text:
-                        "By signing in, you agree to our Terms of Service and Privacy Policy",
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontFamily: 'Roboto',
-                        color: Colors.black)),
-              ),
-              width: 300,
-            ),
           // SignInButton(
           //       Buttons.Google,
           //       onPressed: () {
