@@ -336,6 +336,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         .collection('MerchantData')
                         .doc(user.user!.uid)
                         .set({
+                      "uid": _firebaseAuth.currentUser!.uid.toString(),
                       "email": user.user!.email,
                       "name": widget._nameController.text,
                       "storeName": _storeNameController.text,
