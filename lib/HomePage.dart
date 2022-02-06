@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grocery/databaseManager/DatabaseManager.dart';
 
-import 'Start.dart';
+import 'AddItem.dart';
+// import 'package:flutter_grocery/AddItem.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,15 +19,6 @@ class _HomePageState extends State<HomePage> {
 
   List userProfilesList = [];
 
-  checkAuthentification() async {
-    _auth.authStateChanges().listen((user) {
-      if (user == null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) => Start()));
-      }
-    });
-  }
-
   getUser() async {
     User? firebaseUser = _auth.currentUser;
     await firebaseUser!.reload();
@@ -40,63 +32,40 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  signOut() async {
-    _auth.signOut();
+  navigateToAddItem() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AddItem()));
   }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    this.checkAuthentification();
-    this.getUser();
-    // fetchDatabaseList();
-  }
-
-  // fetchDatabaseList() async {
-  //   dynamic resultant = await DatabaseManager().getUserList();
-
-  //   if (resultant == null) {
-  //     print('Unable to retrieve');
-  //   } else {
-  //     setState(() {
-  //       userProfilesList = resultant;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      child: !isLoggedin
-          ? CircularProgressIndicator()
-          : Column(
-              children: [
-                Container(
-                    height: 400,
-                    child: Image(
-                      image: AssetImage("images/welcome.png"),
-                      fit: BoxFit.contain,
-                    )),
-                Container(
-                  child: Text(
-                      (userProfilesList.length > 0
-                          ? "Hello ${userProfilesList[0]['name']} you are Logged in as ${user.email}"
-                          : ""),
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold)),
-                ),
-                RaisedButton(
-                    padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                    onPressed: signOut,
-                    child: Text('Sign Out',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold)))
-              ],
-            ),
-    ));
+      appBar: AppBar(
+        toolbarHeight: 65.0,
+        backgroundColor: Color(0xff2C6846),
+        automaticallyImplyLeading: false,
+        title: const Text('Home'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.account_circle_rounded),
+            tooltip: 'Open User Profile',
+            iconSize: 40,
+            onPressed: () {
+              // handle the press
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          children: [],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: navigateToAddItem,
+        tooltip: 'Add Grocery Item',
+        backgroundColor: Color(0xff2C6846),
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
