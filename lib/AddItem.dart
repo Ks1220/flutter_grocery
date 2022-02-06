@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_grocery/AuthService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_grocery/HomePage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 import 'package:dotted_border/dotted_border.dart';
 
@@ -23,7 +25,8 @@ class _AddItemState extends State<AddItem> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   User? user = FirebaseAuth.instance.currentUser;
-  File? image;
+  File? _imageFile;
+  String? imageUrl;
 
   TextEditingController _itemNameController = TextEditingController();
   TextEditingController _itemDescriptionController = TextEditingController();
@@ -40,8 +43,16 @@ class _AddItemState extends State<AddItem> {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
+      setState(() => _imageFile = File(image.path));
+      String fileName = Path.basename(_imageFile!.path);
+
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('$fileName');
+      // Uncomment this to save the image into Firestore
+      // await firebaseStorageRef.putFile(File(image.path));
+      setState(() async {
+        imageUrl = await firebaseStorageRef.getDownloadURL();
+      });
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
     }
@@ -103,7 +114,7 @@ class _AddItemState extends State<AddItem> {
                 style: TextStyle(color: Color(0xff2C6846)),
               ),
               onPressed: () {
-                setState(() => this.image = null);
+                setState(() => _imageFile = null);
                 Navigator.of(context).pop();
               },
             ),
@@ -159,7 +170,7 @@ class _AddItemState extends State<AddItem> {
                     ),
                   ),
                   SizedBox(height: 25),
-                  image != null
+                  _imageFile != null
                       ? Container(
                           child: Stack(
                             children: [
@@ -169,7 +180,7 @@ class _AddItemState extends State<AddItem> {
                                   DottedBorder(
                                     padding: EdgeInsets.all(10.0),
                                     color: Color(0xff2C6846),
-                                    child: Image.file(image!,
+                                    child: Image.file(_imageFile!,
                                         width: 100,
                                         height: 100,
                                         fit: BoxFit.cover),
@@ -211,8 +222,9 @@ class _AddItemState extends State<AddItem> {
                                           CrossAxisAlignment.center,
                                       children: <Widget>[
                                         RawMaterialButton(
-                                          onPressed: () =>
-                                              pickImage(ImageSource.gallery),
+                                          onPressed: () => {
+                                            pickImage(ImageSource.gallery),
+                                          },
                                           elevation: 2.0,
                                           fillColor: Color(0xff2C6846),
                                           child: Icon(
@@ -402,7 +414,7 @@ class _AddItemState extends State<AddItem> {
                     .doc()
                     .set({
                   "itemName": _itemNameController.text,
-                  "itemImage": image!.path,
+                  "itemImage": imageUrl,
                   "itemDescription": _itemDescriptionController.text,
                   "stockAmount": _itemStockController.text,
                   "price": _itemPriceController.text,
