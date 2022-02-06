@@ -48,8 +48,7 @@ class _AddItemState extends State<AddItem> {
 
       Reference firebaseStorageRef =
           FirebaseStorage.instance.ref().child('$fileName');
-      // Uncomment this to save the image into Firestore
-      // await firebaseStorageRef.putFile(File(image.path));
+      await firebaseStorageRef.putFile(File(image.path));
       setState(() async {
         imageUrl = await firebaseStorageRef.getDownloadURL();
       });
@@ -362,7 +361,7 @@ class _AddItemState extends State<AddItem> {
                               color: Color(0xff2C6846),
                             )),
                             labelStyle: TextStyle(color: Color(0xff2C6846)),
-                            labelText: "Item Price",
+                            labelText: "Item Price (RM)",
                           ),
                         ),
                       ),
@@ -417,7 +416,7 @@ class _AddItemState extends State<AddItem> {
                   "itemImage": imageUrl,
                   "itemDescription": _itemDescriptionController.text,
                   "stockAmount": _itemStockController.text,
-                  "price": _itemPriceController.text,
+                  "price": "RM" + _itemPriceController.text,
                   "measurementMatrix": _itemMeasurementController.text
                 });
                 Navigator.push(
