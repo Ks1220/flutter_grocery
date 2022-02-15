@@ -1,4 +1,4 @@
-# [Image-1](https://user-images.githubusercontent.com/62043437/154081984-36b1d7f0-9d3a-4a70-8287-115f6b8df748.jpg) Grocerex - A brand new grocery shopping experience!
+# <img src="https://user-images.githubusercontent.com/62043437/154081984-36b1d7f0-9d3a-4a70-8287-115f6b8df748.jpg" width="350" title="hover text"> Grocerex - A brand new grocery shopping experience!
 
 In this project, we will create an e-commerce for groceries application using flutter and firebase. 
 Authors:
