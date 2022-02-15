@@ -1,4 +1,4 @@
-# Brand New Grocery Application
+# Grocerex - A brand new grocery shopping experience
 In this project, we will create an e-commerce for groceries application using flutter and firebase. 
 Authors:
 1. Cheong Keng Son
