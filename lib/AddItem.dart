@@ -213,22 +213,25 @@ class _AddItemState extends State<AddItem> {
               elevation: 0,
               backgroundColor: Colors.white,
               actions: <Widget>[
-                MaterialButton(
-                  onPressed: () => {showDeleteItemsDialog()},
-                  child: Row(children: <Widget>[
-                    Icon(Icons.delete_forever, size: 30, color: Colors.red),
-                    Center(
-                        child: Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0, 3, 0),
-                      child: Text("Delete Forever",
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15),
-                          textAlign: TextAlign.center),
-                    ))
-                  ]),
-                )
+                (widget._isEdit == true
+                    ? MaterialButton(
+                        onPressed: () => {showDeleteItemsDialog()},
+                        child: Row(children: <Widget>[
+                          Icon(Icons.delete_forever,
+                              size: 30, color: Colors.red),
+                          Center(
+                              child: Padding(
+                            padding: EdgeInsets.fromLTRB(5, 0, 3, 0),
+                            child: Text("Delete Forever",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15),
+                                textAlign: TextAlign.center),
+                          ))
+                        ]),
+                      )
+                    : Container())
               ],
             )
           : null,
