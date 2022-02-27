@@ -1,21 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseManager {
-  final CollectionReference profileList =
-      FirebaseFirestore.instance.collection('UserData');
+  final CollectionReference groceryList =
+      FirebaseFirestore.instance.collection('Items');
 
-  Future getUserList() async {
+  Future getGroceryList(currentUser) async {
     List itemsList = [];
 
     try {
-      await profileList.get().then((QuerySnapshot docs) {
-        docs.docs.forEach((element) {
-          itemsList.add(element.data);
+      Query query = groceryList
+          .doc(currentUser!.uid)
+          .collection('Item')
+          .orderBy("itemName");
+      await query.get().then((docs) {
+        docs.docs.forEach((doc) {
+          itemsList.add(doc);
         });
       });
+
       return itemsList;
     } catch (e) {
-      print(e.toString());
+      print("Error: $e");
       return null;
     }
   }
