@@ -218,7 +218,7 @@ class _AddItemState extends State<AddItem> {
                         onPressed: () => {showDeleteItemsDialog()},
                         child: Row(children: <Widget>[
                           Icon(Icons.delete_forever,
-                              size: 30, color: Colors.red),
+                              size: 25, color: Colors.red),
                           Center(
                               child: Padding(
                             padding: EdgeInsets.fromLTRB(5, 0, 3, 0),
