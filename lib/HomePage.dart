@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/ProfilePage.dart';
 import 'package:flutter_grocery/databaseManager/DatabaseManager.dart';
 
 import 'AddItem.dart';
@@ -123,7 +124,8 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Open User Profile',
             iconSize: 40,
             onPressed: () {
-              // handle the press
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => ProfilePage()));
             },
           ),
         ],
@@ -135,7 +137,6 @@ class _HomePageState extends State<HomePage> {
           child: TextField(
             onChanged: (value) {
               filterSearchResults(value);
-              // searchGroceries;
             },
             controller: searchController,
             decoration: InputDecoration(
