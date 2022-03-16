@@ -12,10 +12,9 @@ import 'package:flutter_grocery/Verify.dart';
 class StoreDetails extends StatefulWidget {
   final TextEditingController _nameController,
       _emailController,
-      _passwordController,
-      _confirmPasswordController;
-  StoreDetails(this._nameController, this._emailController,
-      this._passwordController, this._confirmPasswordController,
+      _passwordController;
+  StoreDetails(
+      this._nameController, this._emailController, this._passwordController,
       {Key? key})
       : super(key: key);
   _StoreDetailsState createState() => _StoreDetailsState();
@@ -65,8 +64,6 @@ class _StoreDetailsState extends State<StoreDetails> {
       },
     );
   }
-
-  bool _isObscure2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -336,6 +333,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         .collection('MerchantData')
                         .doc(user.user!.uid)
                         .set({
+                      "uid": _firebaseAuth.currentUser!.uid.toString(),
                       "email": user.user!.email,
                       "name": widget._nameController.text,
                       "storeName": _storeNameController.text,

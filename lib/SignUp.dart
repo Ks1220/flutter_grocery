@@ -273,11 +273,8 @@ class _SignUpState extends State<SignUp> {
               ),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => StoreDetails(
-                        _nameController,
-                        _emailController,
-                        _passwordController,
-                        _confirmPasswordController)));
+                    builder: (context) => StoreDetails(_nameController,
+                        _emailController, _passwordController)));
               },
               child: Text('Next',
                   style: TextStyle(
