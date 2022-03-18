@@ -124,8 +124,8 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Open User Profile',
             iconSize: 40,
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProfilePage(currentUser)));
             },
           ),
         ],
