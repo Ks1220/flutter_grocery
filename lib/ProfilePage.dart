@@ -1,112 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_grocery/databaseManager/DatabaseManager.dart';
-
-import 'AddItem.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final User? currentUser;
+  const ProfilePage(this.currentUser, {Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  late User user;
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  TextEditingController searchController = TextEditingController();
-
-  bool isLoggedin = true;
-  bool _isEdit = false;
-
-  List groceryItemList = [];
-  List nameList = [];
-  List itemsIdList = [];
-  List items = [];
-
-  late List groceries;
-
   @override
   void initState() {
     super.initState();
-    fetchGroceryItemList();
-    fetchItemId();
-    searchController = TextEditingController();
+    getData();
   }
 
   @override
   void dispose() {
     super.dispose();
-    searchController.dispose();
   }
 
-  fetchGroceryItemList() async {
-    dynamic resultant = await DatabaseManager().getGroceryList(currentUser);
-    if (resultant == null) {
-      print("Unable to retrieve");
-    } else {
-      setState(() {
-        groceryItemList = resultant;
-        groceryItemList.forEach((e) => nameList.add(e["itemName"]));
-        items.addAll(groceryItemList);
-      });
-    }
-  }
-
-  fetchItemId() async {
-    Query itemId = FirebaseFirestore.instance
-        .collection('Items')
-        .doc(currentUser!.uid)
-        .collection('Item')
-        .orderBy("itemName");
-
-    await itemId.get().then((docs) {
-      setState(() {
-        docs.docs.forEach((doc) => {itemsIdList.add(doc.id)});
-      });
-    });
-  }
-
-  getUser() async {
-    User? firebaseUser = _auth.currentUser;
-    await firebaseUser!.reload();
-    firebaseUser = _auth.currentUser!;
-
-    if (firebaseUser != null) {
-      setState(() {
-        this.user = firebaseUser!;
-        this.isLoggedin = true;
-      });
-    }
-  }
-
-  void filterSearchResults(String query) {
-    List<dynamic> dummyData = [];
-    dummyData.addAll(items);
-    List<QueryDocumentSnapshot> dummySearchResult = [];
-
-    if (query.isNotEmpty) {
-      dummyData.forEach((item) {
-        if (item["itemName"].toLowerCase().contains(query) ||
-            item["itemName"].contains(query)) {
-          dummySearchResult.add(item);
-        }
-      });
-      setState(() {
-        items.clear();
-        items.addAll(dummySearchResult);
-      });
-      return;
-    } else {
-      setState(() {
-        items.clear();
-        items.addAll(groceryItemList);
-      });
-    }
+  getData() async {
+    var firestore = FirebaseFirestore.instance;
+    DocumentSnapshot qn = await firestore
+        .collection('MerchantData')
+        .doc(widget.currentUser?.uid)
+        .get();
+    return qn.data();
   }
 
   @override
@@ -127,18 +51,257 @@ class _ProfilePageState extends State<ProfilePage> {
             )
           : null,
       body: Container(
+        width: MediaQuery.of(context).size.width,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconButton(
-              splashColor: Colors.transparent,
-              padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
-              icon: Icon(
-                Icons.arrow_back,
-                size: 35,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-              color: Colors.black,
-            )
+            FutureBuilder(
+              future: getData(),
+              builder: (BuildContext context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Column(// here only return is missing
+                        children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20),
+                        child: CircleAvatar(
+                          radius: 50.0,
+                          child: ClipRRect(
+                            child: Image(
+                              height: 100,
+                              width: 100,
+                              image: NetworkImage((snapshot.data
+                                  as Map<String, dynamic>)['shopLogo']),
+                              fit: BoxFit.fill,
+                            ),
+                            borderRadius: BorderRadius.circular(50.0),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                          child: Text(
+                            "Change Profile Photo",
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        shape: Border(
+                          top: BorderSide(
+                              color: Color.fromARGB(255, 199, 199, 199),
+                              width: 1),
+                        ),
+                        leading: (Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Merchant Name",
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )),
+                        trailing: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              (snapshot.data as Map<String, dynamic>)['name'],
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 26,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        shape: Border(
+                            top: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1),
+                            bottom: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1)),
+                        leading: (Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Store Name",
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )),
+                        trailing: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              (snapshot.data
+                                  as Map<String, dynamic>)['storeName'],
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 26,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        shape: Border(
+                            bottom: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1)),
+                        leading: (Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Email",
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )),
+                        trailing: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              (snapshot.data as Map<String, dynamic>)['email'],
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        shape: Border(
+                            bottom: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1)),
+                        leading: (Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Address",
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )),
+                        trailing: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 160.0,
+                              child: Text(
+                                (snapshot.data
+                                    as Map<String, dynamic>)['storeAddress'],
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 26,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      ListTile(
+                        shape: Border(
+                            top: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1),
+                            bottom: BorderSide(
+                                color: Color.fromARGB(255, 199, 199, 199),
+                                width: 1)),
+                        leading: (Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Change Password",
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )),
+                        trailing: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.chevron_right,
+                              size: 26,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ),
+                    ]);
+                  }
+                } else if (snapshot.hasError) {
+                  return Text('no data');
+                }
+                return CircularProgressIndicator();
+              },
+            ),
+            Expanded(
+              child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: ButtonTheme(
+                      buttonColor: Color(0xff2C6846),
+                      minWidth: MediaQuery.of(context).size.width * 0.92,
+                      height: 55.0,
+                      child: RaisedButton(
+                        padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(5.0),
+                        ),
+                        onPressed: () {},
+                        child: Text('Log Out',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                  )),
+            ),
           ],
         ),
       ),
