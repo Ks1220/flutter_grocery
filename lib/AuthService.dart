@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flash/flash.dart';
 import 'dart:developer';
 
-import 'Logging.dart';
-
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   showError(BuildContext context, Object errormessage) {
