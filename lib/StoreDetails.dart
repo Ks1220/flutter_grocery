@@ -8,6 +8,12 @@ import 'package:flutter_grocery/Verify.dart';
 // import 'package:flutter_grocery/provider/GoogleSignInProvider.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 // import 'package:provider/provider.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class StoreDetails extends StatefulWidget {
   final TextEditingController _nameController,
@@ -34,6 +40,9 @@ class _StoreDetailsState extends State<StoreDetails> {
   TextEditingController _storeCountryController = TextEditingController();
 
   late String _email, _password, _name, _confirmpass;
+
+  File? _imageFile;
+  late String imageUrl;
 
   @override
   void initState() {
@@ -65,6 +74,121 @@ class _StoreDetailsState extends State<StoreDetails> {
     );
   }
 
+  showMyDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: SimpleDialog(
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  pickImage(ImageSource.gallery);
+                  Navigator.pop(context, _imageFile != null);
+                },
+                child: Row(children: [
+                  Icon(
+                    Icons.image,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Select from Gallery',
+                    style: TextStyle(fontSize: 15),
+                  )
+                ]),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  pickImage(ImageSource.camera);
+                  Navigator.pop(context, _imageFile != null);
+                },
+                child: Row(children: [
+                  Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Take Image',
+                    style: TextStyle(fontSize: 15),
+                  )
+                ]),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  showDeleteDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Remove Image'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                    'Are you sure to delete this image? Once delete, you will required to insert another image.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Ok',
+                style: TextStyle(color: Color(0xff2C6846)),
+              ),
+              onPressed: () {
+                setState(() => _imageFile = null);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      setState(() => _imageFile = File(image.path));
+      String fileName = Path.basename(_imageFile!.path);
+
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('$fileName');
+      await firebaseStorageRef.putFile(File(image.path));
+      setState(() async {
+        imageUrl = await firebaseStorageRef.getDownloadURL();
+      });
+    } on PlatformException catch (e) {
+      print("Failed to pick image: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -92,8 +216,9 @@ class _StoreDetailsState extends State<StoreDetails> {
               toolbarHeight: 90.0,
             )
           : null,
-      body: Center(
-          child: Column(
+      body: SingleChildScrollView(
+          child: Center(
+              child: Column(
         children: <Widget>[
           if (!isKeyboard) SizedBox(height: 10.0),
           if (!isKeyboard)
@@ -125,12 +250,60 @@ class _StoreDetailsState extends State<StoreDetails> {
               ),
               width: mediaQueryData.size.width * 0.85,
             ),
-          SizedBox(height: 30),
           Container(
             width: mediaQueryData.size.width * 0.85,
             child: Form(
                 key: _formKey,
                 child: Column(children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 170,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            flex: 1,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                _imageFile != null
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          showMyDialog();
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 50.0,
+                                          child: ClipRRect(
+                                            child: Image.file(_imageFile!,
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover),
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                          ),
+                                        ),
+                                      )
+                                    : RawMaterialButton(
+                                        onPressed: () => {showMyDialog()},
+                                        elevation: 2.0,
+                                        fillColor: Colors.grey,
+                                        child: Icon(
+                                          Icons.add_circle,
+                                          size: 25.0,
+                                          color:
+                                              Color.fromRGBO(28, 125, 232, 1),
+                                        ),
+                                        padding: EdgeInsets.all(35.0),
+                                        shape: CircleBorder(),
+                                      ),
+                                SizedBox(height: 10.0),
+                                Text("Shop Logo",
+                                    style: TextStyle(color: Color(0xff2C6846)))
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
                   TextFormField(
                     controller: _storeNameController,
                     validator: (input) {
@@ -336,11 +509,14 @@ class _StoreDetailsState extends State<StoreDetails> {
                       "uid": _firebaseAuth.currentUser!.uid.toString(),
                       "email": user.user!.email,
                       "name": widget._nameController.text,
+                      "shopLogo": imageUrl,
                       "storeName": _storeNameController.text,
                       "storeAddress": _storeAddressOneController.text +
                           "," +
                           _storeAddressTwoController.text +
+                          "," +
                           _storePostalCodeController.text +
+                          "," +
                           _storeCityController.text +
                           "," +
                           _storeStateController.text +
@@ -385,7 +561,7 @@ class _StoreDetailsState extends State<StoreDetails> {
           //       },
           //     )
         ],
-      )),
+      ))),
     );
   }
 }
