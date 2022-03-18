@@ -209,8 +209,9 @@ class _LoginState extends State<Login> {
       _emailController.clear();
       _passwordController.clear();
       print('Sign in Successful');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false);
     }
   }
 }
