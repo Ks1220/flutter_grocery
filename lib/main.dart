@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grocery/HomePage.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       debugShowCheckedModeBanner: false,
-      home: Start(),
+      home: FirebaseAuth.instance.currentUser != null ? HomePage() : Start(),
     );
   }
 }
