@@ -153,114 +153,146 @@ class _HomePageState extends State<HomePage> {
                 )),
           ),
         ),
-        Expanded(
-            child: searchController.text.length > 0
-                ? ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (ctx, index) {
-                      return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    AddItem(!_isEdit, itemsIdList[index])));
-                          },
-                          child: Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(0.0, 10.0, 30, 0.0),
-                              height: 90,
-                              child: ListTile(
-                                shape: Border(
-                                    bottom: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 199, 199, 199),
-                                        width: 1)),
-                                title: Text(items.length > 0
-                                    ? "${items[index]["itemName"]}"
-                                    : ""),
-                                subtitle: Text(items.length > 0
-                                    ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
-                                    : ""),
-                                leading: (Image(
-                                    width: 65,
-                                    height: 65,
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        items[index]["itemImage"]))),
-                                trailing: Text(items.length > 0
-                                    ? "Stock: ${items[index]["stockAmount"]}"
-                                    : ""),
-                              )));
-                    },
-                  )
-                : AlphabetScrollView(
-                    list: nameList.map((e) => AlphaModel(e)).toList(),
-                    alignment: LetterAlignment.right,
-                    itemExtent: 150,
-                    unselectedTextStyle: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black),
-                    selectedTextStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff2C6846)),
-                    overlayWidget: (value) => Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Icon(
-                          Icons.star,
-                          size: 50,
-                          color: Colors.red,
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          alignment: Alignment.center,
+        items.length == 0
+            ? Container(
+                height: MediaQuery.of(context).size.width,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(
+                          width: 100,
+                          height: 100,
+                          image: AssetImage("images/empty-list.png"),
+                          fit: BoxFit.contain),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          width: 170,
                           child: Text(
-                            '$value'.toUpperCase(),
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                          ),
+                            "Add Item by Pressing '+' Button",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ))
+                    ],
+                  ),
+                ),
+              )
+            : Expanded(
+                child: searchController.text.length > 0
+                    ? ListView.builder(
+                        itemCount: items.length,
+                        itemBuilder: (ctx, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddItem(!_isEdit, itemsIdList[index])));
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0.0, 10.0, 30, 0.0),
+                                  height: 90,
+                                  child: ListTile(
+                                    shape: Border(
+                                        bottom: BorderSide(
+                                            color: Color.fromARGB(
+                                                255, 199, 199, 199),
+                                            width: 1)),
+                                    title: Text(items.length > 0
+                                        ? "${items[index]["itemName"]}"
+                                        : ""),
+                                    subtitle: Text(items.length > 0
+                                        ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
+                                        : ""),
+                                    leading: (Image(
+                                        width: 65,
+                                        height: 65,
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            items[index]["itemImage"]))),
+                                    trailing: Text(items.length > 0
+                                        ? "Stock: ${items[index]["stockAmount"]}"
+                                        : ""),
+                                  )));
+                        },
+                      )
+                    : AlphabetScrollView(
+                        list: nameList.map((e) => AlphaModel(e)).toList(),
+                        alignment: LetterAlignment.right,
+                        itemExtent: 150,
+                        unselectedTextStyle: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black),
+                        selectedTextStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff2C6846)),
+                        overlayWidget: (value) => Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '$value'.toUpperCase(),
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    itemBuilder: (_, index, buildContext) {
-                      return (GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    AddItem(!_isEdit, itemsIdList[index])));
-                          },
-                          child: Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(0.0, 10.0, 30, 0.0),
-                              height: 90,
-                              child: ListTile(
-                                shape: Border(
-                                    bottom: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 199, 199, 199),
-                                        width: 1)),
-                                title: Text(items[index] != null
-                                    ? "${items[index]["itemName"]}"
-                                    : ""),
-                                subtitle: Text(items[index] != null
-                                    ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
-                                    : ""),
-                                leading: (Image(
-                                    width: 65,
-                                    height: 65,
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        items[index]["itemImage"]))),
-                                trailing: Text(items[index] != null
-                                    ? "Stock: ${items[index]["stockAmount"]}"
-                                    : ""),
-                              ))));
-                    },
-                  ))
+                        itemBuilder: (_, index, buildContext) {
+                          return (GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddItem(!_isEdit, itemsIdList[index])));
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0.0, 10.0, 30, 0.0),
+                                  height: 90,
+                                  child: ListTile(
+                                    shape: Border(
+                                        bottom: BorderSide(
+                                            color: Color.fromARGB(
+                                                255, 199, 199, 199),
+                                            width: 1)),
+                                    title: Text(items[index] != null
+                                        ? "${items[index]["itemName"]}"
+                                        : ""),
+                                    subtitle: Text(items[index] != null
+                                        ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
+                                        : ""),
+                                    leading: (Image(
+                                        width: 65,
+                                        height: 65,
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            items[index]["itemImage"]))),
+                                    trailing: Text(items[index] != null
+                                        ? "Stock: ${items[index]["stockAmount"]}"
+                                        : ""),
+                                  ))));
+                        },
+                      )),
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
