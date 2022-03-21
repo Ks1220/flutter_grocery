@@ -209,22 +209,28 @@ class _LoginState extends State<Login> {
     } else {
       showFlash(
         context: context,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         builder: (context, controller) {
           return Flash.bar(
             controller: controller,
             backgroundColor: Colors.green,
             position: FlashPosition.top,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(80.0, 20.0, 80.0, 20.0),
-              child: Text(
-                "Sign In Successfully",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 70,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Sign In Successfully",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                )),
           );
         },
       );

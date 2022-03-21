@@ -75,23 +75,29 @@ class _ProfilePageState extends State<ProfilePage> {
                   await FirebaseAuth.instance.signOut().then((value) async => {
                         showFlash(
                           context: context,
-                          duration: const Duration(seconds: 3),
+                          duration: const Duration(seconds: 2),
                           builder: (context, controller) {
                             return Flash.bar(
                               controller: controller,
                               backgroundColor: Colors.green,
                               position: FlashPosition.top,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    80.0, 20.0, 80.0, 20.0),
-                                child: Text(
-                                  "Log Out Successfully",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 70,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Log Out Successfully",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                             );
                           },
                         ),
@@ -295,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         context: context,
                                                         duration:
                                                             const Duration(
-                                                                seconds: 3),
+                                                                seconds: 2),
                                                         builder: (context,
                                                             controller) {
                                                           return Flash.bar(
@@ -493,7 +499,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         context: context,
                                                         duration:
                                                             const Duration(
-                                                                seconds: 3),
+                                                                seconds: 2),
                                                         builder: (context,
                                                             controller) {
                                                           return Flash.bar(
@@ -726,7 +732,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         context: context,
                                                         duration:
                                                             const Duration(
-                                                                seconds: 3),
+                                                                seconds: 2),
                                                         builder: (context,
                                                             controller) {
                                                           return Flash.bar(

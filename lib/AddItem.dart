@@ -88,20 +88,25 @@ class _AddItemState extends State<AddItem> {
       duration: const Duration(seconds: 5),
       builder: (context, controller) {
         return Flash.bar(
-          margin: const EdgeInsets.fromLTRB(1.0, 0.0, 1.0, 0.0),
           controller: controller,
           backgroundColor: Colors.red,
           position: FlashPosition.top,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(75.0, 20.0, 75.0, 20.0),
-            child: Text(
-              errormessage.toString(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ),
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 70,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    errormessage.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              )),
         );
       },
     );
@@ -537,23 +542,30 @@ class _AddItemState extends State<AddItem> {
                       "measurementMatrix": _itemMeasurementController.text
                     }).then((value) => showFlash(
                               context: context,
-                              duration: const Duration(seconds: 3),
+                              duration: const Duration(seconds: 2),
                               builder: (context, controller) {
                                 return Flash.bar(
                                   controller: controller,
                                   backgroundColor: Colors.green,
                                   position: FlashPosition.top,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        80.0, 20.0, 80.0, 20.0),
-                                    child: Text(
-                                      "Edited Successfully",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 70,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Edited Successfully",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      )),
                                 );
                               },
                             ));
@@ -573,23 +585,30 @@ class _AddItemState extends State<AddItem> {
                       "measurementMatrix": _itemMeasurementController.text
                     }).then((value) => showFlash(
                               context: context,
-                              duration: const Duration(seconds: 3),
+                              duration: const Duration(seconds: 2),
                               builder: (context, controller) {
                                 return Flash.bar(
                                   controller: controller,
                                   backgroundColor: Colors.green,
                                   position: FlashPosition.top,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        80.0, 20.0, 80.0, 20.0),
-                                    child: Text(
-                                      "Added successfully",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 70,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Added Successfully",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      )),
                                 );
                               },
                             ));
