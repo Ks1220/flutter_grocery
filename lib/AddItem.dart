@@ -535,7 +535,29 @@ class _AddItemState extends State<AddItem> {
                       "stockAmount": _itemStockController.text,
                       "price": _itemPriceController.text,
                       "measurementMatrix": _itemMeasurementController.text
-                    });
+                    }).then((value) => showFlash(
+                              context: context,
+                              duration: const Duration(seconds: 3),
+                              builder: (context, controller) {
+                                return Flash.bar(
+                                  controller: controller,
+                                  backgroundColor: Colors.green,
+                                  position: FlashPosition.top,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        80.0, 20.0, 80.0, 20.0),
+                                    child: Text(
+                                      "Edited Successfully",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ));
+                    Future.delayed(const Duration(seconds: 2), () {});
                   } else {
                     await FirebaseFirestore.instance
                         .collection('Items')
@@ -549,7 +571,33 @@ class _AddItemState extends State<AddItem> {
                       "stockAmount": _itemStockController.text,
                       "price": "RM" + _itemPriceController.text,
                       "measurementMatrix": _itemMeasurementController.text
-                    });
+                    }).then((value) => showFlash(
+                              context: context,
+                              duration: const Duration(seconds: 3),
+                              builder: (context, controller) {
+                                return Flash.bar(
+                                  controller: controller,
+                                  backgroundColor: Colors.green,
+                                  position: FlashPosition.top,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        80.0, 20.0, 80.0, 20.0),
+                                    child: Text(
+                                      "Added successfully",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ));
+                    _itemNameController.clear();
+                    _itemDescriptionController.clear();
+                    _itemStockController.clear();
+                    _itemPriceController.clear();
+                    Future.delayed(const Duration(seconds: 2), () {});
                   }
 
                   Navigator.push(
