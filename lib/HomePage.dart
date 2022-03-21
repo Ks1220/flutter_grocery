@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                       Image(
                           width: 100,
                           height: 100,
-                          image: AssetImage("images/empty-list.png"),
+                          image: AssetImage("images/empty-guide.png"),
                           fit: BoxFit.contain),
                       SizedBox(
                         height: 20,
