@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+
+import 'Start.dart';
 
 class ProfilePage extends StatefulWidget {
   final User? currentUser;
@@ -33,6 +35,80 @@ class _ProfilePageState extends State<ProfilePage> {
     return qn.data();
   }
 
+  showLogOutDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Log out'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure you want to log out?.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Ok',
+                style: TextStyle(color: Color(0xff2C6846)),
+              ),
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.signOut().then((value) async => {
+                        showFlash(
+                          context: context,
+                          duration: const Duration(seconds: 3),
+                          builder: (context, controller) {
+                            return Flash.bar(
+                              controller: controller,
+                              backgroundColor: Colors.green,
+                              position: FlashPosition.top,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    80.0, 20.0, 80.0, 20.0),
+                                child: Text(
+                                  "Log Out Successfully",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Future.delayed(const Duration(seconds: 2), () {
+                          Navigator.of(context).pop();
+                        }).then((value) => {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => Start()),
+                                  (Route<dynamic> route) => false)
+                            })
+                      });
+                } catch (e) {
+                  print("Error: $e");
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -60,8 +136,18 @@ class _ProfilePageState extends State<ProfilePage> {
               builder: (BuildContext context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
+                    return Container(
+                      height: MediaQuery.of(context).size.width,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                          ],
+                        ),
+                      ),
                     );
                   } else {
                     return Column(// here only return is missing
@@ -292,7 +378,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5.0),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          showLogOutDialog();
+                        },
                         child: Text('Log Out',
                             style: TextStyle(
                                 color: Colors.white,
