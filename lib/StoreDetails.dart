@@ -8,7 +8,6 @@ import 'package:flutter_grocery/Verify.dart';
 // import 'package:flutter_grocery/provider/GoogleSignInProvider.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 // import 'package:provider/provider.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -55,20 +54,25 @@ class _StoreDetailsState extends State<StoreDetails> {
       duration: const Duration(seconds: 5),
       builder: (context, controller) {
         return Flash.bar(
-          margin: const EdgeInsets.fromLTRB(1.0, 0.0, 1.0, 0.0),
           controller: controller,
           backgroundColor: Colors.red,
           position: FlashPosition.top,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(75.0, 20.0, 75.0, 20.0),
-            child: Text(
-              errormessage.toString(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ),
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 70,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    errormessage.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              )),
         );
       },
     );

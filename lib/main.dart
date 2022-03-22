@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
             body: DoubleBackToCloseApp(
           child:
               FirebaseAuth.instance.currentUser != null ? HomePage() : Start(),
-          snackBar: const SnackBar(content: Text("Tap back again to leave")),
+          snackBar:
+              const SnackBar(content: Text("Press/Swipe back again to leave")),
         )));
   }
 }
