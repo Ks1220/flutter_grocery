@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 import 'Start.dart';
 
@@ -15,10 +19,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final Future? myFuture;
+
   @override
   void initState() {
     super.initState();
     getData();
+    myFuture = getData();
   }
 
   @override
@@ -31,6 +38,9 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _storeNameController = TextEditingController();
   TextEditingController _storeAddressController = TextEditingController();
+
+  File? _imageFile;
+  late String imageUrl;
 
   getData() async {
     var firestore = FirebaseFirestore.instance;
@@ -121,11 +131,123 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  showMyDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: SimpleDialog(
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  pickImage(ImageSource.gallery);
+                  Navigator.pop(context, _imageFile != null);
+                },
+                child: Row(children: [
+                  Icon(
+                    Icons.image,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Select from Gallery',
+                    style: TextStyle(fontSize: 15),
+                  )
+                ]),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  pickImage(ImageSource.camera);
+                  Navigator.pop(context, _imageFile != null);
+                },
+                child: Row(children: [
+                  Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Take Image',
+                    style: TextStyle(fontSize: 15),
+                  )
+                ]),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      setState(() => _imageFile = File(image.path));
+      String fileName = Path.basename(_imageFile!.path);
+
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('$fileName');
+      await firebaseStorageRef.putFile(File(image.path));
+      setState(() async {
+        imageUrl = await firebaseStorageRef.getDownloadURL();
+
+        await FirebaseFirestore.instance
+            .collection('MerchantData')
+            .doc(widget.currentUser?.uid)
+            .update({"shopLogo": imageUrl}).then((value) => {
+                  showFlash(
+                    context: context,
+                    duration: const Duration(seconds: 2),
+                    builder: (context, controller) {
+                      return Flash.bar(
+                        controller: controller,
+                        backgroundColor: Colors.green,
+                        position: FlashPosition.top,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 70,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Shop Logo Updated Successfully",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            )),
+                      );
+                    },
+                  ).then((value) {
+                    Future.delayed(const Duration(seconds: 2), () {});
+                  })
+                });
+        setState(() {});
+      });
+      return imageUrl;
+    } on PlatformException catch (e) {
+      print("Failed to pick image: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: !isKeyboard
           ? AppBar(
               toolbarHeight: 65.0,
@@ -152,23 +274,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     (snapshot.data as Map<String, dynamic>)['storeName'];
                 _storeAddressController.text =
                     (snapshot.data as Map<String, dynamic>)['storeAddress'];
+                imageUrl = (snapshot.data as Map<String, dynamic>)['shopLogo'];
 
                 if (snapshot.hasData) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      height: MediaQuery.of(context).size.width,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                          ],
-                        ),
-                      ),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
                     );
-                  } else {
+                  } else if (snapshot.connectionState == ConnectionState.done) {
                     return Column(children: [
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20),
@@ -178,8 +295,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Image(
                               height: 100,
                               width: 100,
-                              image: NetworkImage((snapshot.data
-                                  as Map<String, dynamic>)['shopLogo']),
+                              image: NetworkImage(imageUrl),
                               fit: BoxFit.fill,
                             ),
                             borderRadius: BorderRadius.circular(50.0),
@@ -187,11 +303,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showMyDialog();
+                        },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
                           child: Text(
-                            "Change Profile Photo",
+                            "Change Logo Photo",
                             style: const TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
