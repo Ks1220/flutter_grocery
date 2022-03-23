@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   late List groceries;
 
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +45,12 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     searchController.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   fetchGroceryItemList() async {
@@ -141,19 +149,13 @@ class _HomePageState extends State<HomePage> {
             controller: searchController,
             decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {
-                    searchController.clear();
-                  },
-                ),
                 hintText: 'Search...',
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 )),
           ),
         ),
-        items.length == 0
+        items.length == 0 && searchController.text.isEmpty
             ? Container(
                 height: MediaQuery.of(context).size.width,
                 child: Align(
@@ -302,6 +304,22 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Add Grocery Item',
         backgroundColor: Color(0xff2C6846),
         child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedIconTheme: IconThemeData(color: Color(0xff2C6846)),
+        selectedItemColor: Color(0xff2C6846),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.swap_horiz),
+            label: 'Orders',
+          ),
+        ],
       ),
     );
   }

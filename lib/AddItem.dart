@@ -32,11 +32,23 @@ class _AddItemState extends State<AddItem> {
   late String imageUrl;
   DocumentSnapshot? groceryItem;
 
+  String dropdownvalue = 'kg';
+
+  var measurementMatrix = [
+    'kg',
+    'g',
+    'mg',
+    'L',
+    'mL',
+    'lb',
+    'piece',
+  ];
+
   TextEditingController _itemNameController = TextEditingController();
   TextEditingController _itemDescriptionController = TextEditingController();
   TextEditingController _itemStockController = TextEditingController();
   TextEditingController _itemPriceController = TextEditingController();
-  TextEditingController _itemMeasurementController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +70,7 @@ class _AddItemState extends State<AddItem> {
           _itemDescriptionController.text = docs["itemDescription"];
           _itemStockController.text = docs["stockAmount"];
           _itemPriceController.text = docs["price"];
-          _itemMeasurementController.text = docs["measurementMatrix"];
+          dropdownvalue = docs["measurementMatrix"];
         });
       });
     }
@@ -489,10 +501,35 @@ class _AddItemState extends State<AddItem> {
                     ],
                   ),
                   SizedBox(height: 25.0),
-                  TextFormField(
-                    controller: _itemMeasurementController,
+                  // TextFormField(
+                  //   controller: _itemMeasurementController,
+                  //   validator: (input) {
+                  //     if (input!.isEmpty)
+                  //       return 'Pleas enter a Measurement Matrix for this item';
+                  //   },
+                  //   decoration: InputDecoration(
+                  //     focusedErrorBorder: OutlineInputBorder(
+                  //       borderSide: BorderSide(color: Colors.red),
+                  //     ),
+                  //     errorBorder: OutlineInputBorder(
+                  //       borderSide: BorderSide(color: Colors.red),
+                  //     ),
+                  //     errorStyle: TextStyle(height: 0.4),
+                  //     enabledBorder: OutlineInputBorder(
+                  //         borderSide: BorderSide(color: Color(0xff2C6846))),
+                  //     focusColor: Color(0xff2C6846),
+                  //     focusedBorder: OutlineInputBorder(
+                  //         borderSide: BorderSide(
+                  //       color: Color(0xff2C6846),
+                  //     )),
+                  //     labelStyle: TextStyle(color: Color(0xff2C6846)),
+                  //     labelText: "Measure Matrix (e.g: kg, g, ml, l)",
+                  //   ),
+                  // ),
+                  DropdownButtonFormField(
+                    value: dropdownvalue,
                     validator: (input) {
-                      if (input!.isEmpty)
+                      if (input.toString().isEmpty)
                         return 'Pleas enter a Measurement Matrix for this item';
                     },
                     decoration: InputDecoration(
@@ -513,125 +550,140 @@ class _AddItemState extends State<AddItem> {
                       labelStyle: TextStyle(color: Color(0xff2C6846)),
                       labelText: "Measure Matrix (e.g: kg, g, ml, l)",
                     ),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: measurementMatrix.map((items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                    },
                   ),
                 ])),
           ),
           SizedBox(height: 30),
-          ButtonTheme(
-            buttonColor: Color(0xff2C6846),
-            minWidth: mediaQueryData.size.width * 0.85,
-            height: 60.0,
-            child: RaisedButton(
-              padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(5.0),
-              ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  if (widget._isEdit == true) {
-                    await FirebaseFirestore.instance
-                        .collection('Items')
-                        .doc(user!.uid)
-                        .collection('Item')
-                        .doc(widget._itemId)
-                        .update({
-                      "itemName": _itemNameController.text,
-                      "itemDescription": _itemDescriptionController.text,
-                      "stockAmount": _itemStockController.text,
-                      "price": _itemPriceController.text,
-                      "measurementMatrix": _itemMeasurementController.text
-                    }).then((value) => showFlash(
-                              context: context,
-                              duration: const Duration(seconds: 2),
-                              builder: (context, controller) {
-                                return Flash.bar(
-                                  controller: controller,
-                                  backgroundColor: Colors.green,
-                                  position: FlashPosition.top,
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 70,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Edited Successfully",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
+          if (!isKeyboard)
+            ButtonTheme(
+              buttonColor: Color(0xff2C6846),
+              minWidth: mediaQueryData.size.width * 0.85,
+              height: 60.0,
+              child: RaisedButton(
+                padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(5.0),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (widget._isEdit == true) {
+                      await FirebaseFirestore.instance
+                          .collection('Items')
+                          .doc(user!.uid)
+                          .collection('Item')
+                          .doc(widget._itemId)
+                          .update({
+                        "itemName": _itemNameController.text,
+                        "itemDescription": _itemDescriptionController.text,
+                        "stockAmount": _itemStockController.text,
+                        "price": _itemPriceController.text,
+                        "measurementMatrix": dropdownvalue
+                      }).then((value) => showFlash(
+                                context: context,
+                                duration: const Duration(seconds: 2),
+                                builder: (context, controller) {
+                                  return Flash.bar(
+                                    controller: controller,
+                                    backgroundColor: Colors.green,
+                                    position: FlashPosition.top,
+                                    child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 70,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Edited Successfully",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )),
-                                );
-                              },
-                            ));
-                    Future.delayed(const Duration(seconds: 2), () {});
-                  } else {
-                    await FirebaseFirestore.instance
-                        .collection('Items')
-                        .doc(user!.uid)
-                        .collection('Item')
-                        .doc()
-                        .set({
-                      "itemName": _itemNameController.text,
-                      "itemImage": imageUrl,
-                      "itemDescription": _itemDescriptionController.text,
-                      "stockAmount": _itemStockController.text,
-                      "price": "RM" + _itemPriceController.text,
-                      "measurementMatrix": _itemMeasurementController.text
-                    }).then((value) => showFlash(
-                              context: context,
-                              duration: const Duration(seconds: 2),
-                              builder: (context, controller) {
-                                return Flash.bar(
-                                  controller: controller,
-                                  backgroundColor: Colors.green,
-                                  position: FlashPosition.top,
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 70,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Added Successfully",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
+                                          ],
+                                        )),
+                                  );
+                                },
+                              ));
+                      Future.delayed(const Duration(seconds: 2), () {});
+                    } else {
+                      await FirebaseFirestore.instance
+                          .collection('Items')
+                          .doc(user!.uid)
+                          .collection('Item')
+                          .doc()
+                          .set({
+                        "itemName": _itemNameController.text,
+                        "itemImage": imageUrl,
+                        "itemDescription": _itemDescriptionController.text,
+                        "stockAmount": _itemStockController.text,
+                        "price": "RM" + _itemPriceController.text,
+                        "measurementMatrix": dropdownvalue
+                      }).then((value) => showFlash(
+                                context: context,
+                                duration: const Duration(seconds: 2),
+                                builder: (context, controller) {
+                                  return Flash.bar(
+                                    controller: controller,
+                                    backgroundColor: Colors.green,
+                                    position: FlashPosition.top,
+                                    child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 70,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Added Successfully",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )),
-                                );
-                              },
-                            ));
-                    _itemNameController.clear();
-                    _itemDescriptionController.clear();
-                    _itemStockController.clear();
-                    _itemPriceController.clear();
-                    Future.delayed(const Duration(seconds: 2), () {});
-                  }
+                                          ],
+                                        )),
+                                  );
+                                },
+                              ));
+                      _itemNameController.clear();
+                      _itemDescriptionController.clear();
+                      _itemStockController.clear();
+                      _itemPriceController.clear();
+                      Future.delayed(const Duration(seconds: 2), () {});
+                    }
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage()));
-                }
-              },
-              child: Text('Save',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600)),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => HomePage()));
+                  }
+                },
+                child: Text('Save',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w600)),
+              ),
             ),
-          ),
         ],
       )),
     );
