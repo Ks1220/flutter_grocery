@@ -149,19 +149,13 @@ class _HomePageState extends State<HomePage> {
             controller: searchController,
             decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {
-                    searchController.clear();
-                  },
-                ),
                 hintText: 'Search...',
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 )),
           ),
         ),
-        items.length == 0
+        items.length == 0 && searchController.text.isEmpty
             ? Container(
                 height: MediaQuery.of(context).size.width,
                 child: Align(
@@ -322,7 +316,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.toc),
+            icon: Icon(Icons.swap_horiz),
             label: 'Orders',
           ),
         ],
