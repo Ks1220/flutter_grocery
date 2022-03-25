@@ -30,46 +30,51 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     GoogleSignInAccount? user = _googleSignIn.currentUser;
+    final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        titleSpacing: 12,
-        leading: ModalRoute.of(context)?.canPop == true
-            ? IconButton(
-                splashColor: Colors.transparent,
-                padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 35,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-                color: Colors.black,
-              )
-            : null,
-        title: Image.asset('images/logo-name.png'),
-        backgroundColor: new Color(0xffff),
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        toolbarHeight: 90.0,
-      ),
+      appBar: isKeyboard
+          ? AppBar(
+              titleSpacing: 12,
+              leading: ModalRoute.of(context)?.canPop == true
+                  ? IconButton(
+                      splashColor: Colors.transparent,
+                      padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 35,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                      color: Colors.black,
+                    )
+                  : null,
+              title: Image.asset('images/logo-name.png'),
+              backgroundColor: new Color(0xffff),
+              shadowColor: Colors.transparent,
+              elevation: 0,
+              toolbarHeight: 90.0,
+            )
+          : null,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: <Widget>[
-              Container(
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text: "Welcome, Merchant",
-                      style: TextStyle(
-                          fontSize: mediaQueryData.textScaleFactor /
-                              mediaQueryData.textScaleFactor *
-                              33,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
+              if (!isKeyboard)
+                Container(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        text: "Welcome, Merchant",
+                        style: TextStyle(
+                            fontSize: mediaQueryData.textScaleFactor /
+                                mediaQueryData.textScaleFactor *
+                                33,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black)),
+                  ),
                 ),
-              ),
 
               Container(
                 child: Image(
