@@ -23,7 +23,7 @@ Authors:
 Download the zip file or directly clone from github using the command:
 
 ```
-git clone https://github.com/Ks1220/budget_calculator_scala.git
+git clone https://github.com/Ks1220/flutter_grocery.git
 ```
 
 ### Prerequisites
