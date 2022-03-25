@@ -36,7 +36,7 @@ class _StartState extends State<Start> {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                  text: "Made e-Groceries easier",
+                  text: "Welcome, Merchant",
                   style: TextStyle(
                       fontSize: mediaQueryData.textScaleFactor /
                           mediaQueryData.textScaleFactor *
@@ -45,7 +45,6 @@ class _StartState extends State<Start> {
                       fontWeight: FontWeight.w600,
                       color: Colors.black)),
             ),
-            width: mediaQueryData.size.width * 0.8,
           ),
           Container(
               child: Image(

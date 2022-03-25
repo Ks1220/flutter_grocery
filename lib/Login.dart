@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                      text: "Made e-Groceries easier",
+                      text: "Welcome, Merchant",
                       style: TextStyle(
                           fontSize: mediaQueryData.textScaleFactor /
                               mediaQueryData.textScaleFactor *
@@ -69,7 +69,6 @@ class _LoginState extends State<Login> {
                           fontWeight: FontWeight.w600,
                           color: Colors.black)),
                 ),
-                width: mediaQueryData.size.width * 0.8,
               ),
 
               Container(

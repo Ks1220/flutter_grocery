@@ -106,7 +106,7 @@ class _SignUpState extends State<SignUp> {
               child: RichText(
                 textAlign: TextAlign.left,
                 text: TextSpan(
-                    text: "Create an account to start ordering",
+                    text: "Create an account to start uploading your items",
                     style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Inter',
