@@ -195,65 +195,62 @@ class _StoreDetailsState extends State<StoreDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      appBar: !isKeyboard
-          ? AppBar(
-              titleSpacing: 12,
-              leading: ModalRoute.of(context)?.canPop == true
-                  ? IconButton(
-                      splashColor: Colors.transparent,
-                      padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
-                      icon: Icon(
-                        Icons.arrow_back,
-                        size: 35,
-                      ),
-                      onPressed: () => Navigator.of(context).pop(),
-                      color: Colors.black,
-                    )
-                  : null,
-              title: Image.asset('images/logo-name.png'),
-              backgroundColor: new Color(0xffff),
-              shadowColor: Colors.transparent,
-              elevation: 0,
-              toolbarHeight: 90.0,
-            )
-          : null,
+      appBar: AppBar(
+        titleSpacing: 12,
+        leading: ModalRoute.of(context)?.canPop == true
+            ? IconButton(
+                splashColor: Colors.transparent,
+                padding: const EdgeInsets.only(left: 30.0, bottom: 15.0),
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 35,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+                color: Colors.black,
+              )
+            : null,
+        title: Image.asset('images/logo-name.png'),
+        backgroundColor: new Color(0xffff),
+        shadowColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 90.0,
+      ),
       body: SingleChildScrollView(
           child: Center(
               child: Column(
         children: <Widget>[
-          if (!isKeyboard) SizedBox(height: 10.0),
-          if (!isKeyboard)
-            Container(
-              child: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                    text: "Shop Details",
-                    style: TextStyle(
-                        fontSize: 26,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
-              ),
-              width: mediaQueryData.size.width * 0.85,
+          SizedBox(height: 10.0),
+
+          Container(
+            child: RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                  text: "Shop Details",
+                  style: TextStyle(
+                      fontSize: 26,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black)),
             ),
-          if (!isKeyboard)
-            Container(
-              child: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                    text:
-                        "Please enter your shop details before proceed on adding your grocery items ",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black)),
-              ),
-              width: mediaQueryData.size.width * 0.85,
+            width: mediaQueryData.size.width * 0.85,
+          ),
+
+          Container(
+            child: RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                  text:
+                      "Please enter your shop details before proceed on adding your grocery items ",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black)),
             ),
+            width: mediaQueryData.size.width * 0.85,
+          ),
           Container(
             width: mediaQueryData.size.width * 0.85,
             child: Form(
@@ -481,81 +478,79 @@ class _StoreDetailsState extends State<StoreDetails> {
                 ])),
           ),
           SizedBox(height: 20),
-          if (!isKeyboard)
-            ButtonTheme(
-              buttonColor: Color(0xff2C6846),
-              minWidth: mediaQueryData.size.width * 0.85,
-              height: 60.0,
-              child: RaisedButton(
-                padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(5.0),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    var user;
-                    try {
-                      user = await _firebaseAuth.createUserWithEmailAndPassword(
-                          email: widget._emailController.text,
-                          password: widget._passwordController.text);
-                    } on FirebaseAuthException catch (error) {
-                      switch (error.code) {
-                        case "email-already-in-use":
-                          showError(context,
-                              "The email entered previously was already in used. Please go to login page.");
-                          break;
-                      }
+
+          ButtonTheme(
+            buttonColor: Color(0xff2C6846),
+            minWidth: mediaQueryData.size.width * 0.85,
+            height: 60.0,
+            child: RaisedButton(
+              padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(5.0),
+              ),
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  var user;
+                  try {
+                    user = await _firebaseAuth.createUserWithEmailAndPassword(
+                        email: widget._emailController.text,
+                        password: widget._passwordController.text);
+                  } on FirebaseAuthException catch (error) {
+                    switch (error.code) {
+                      case "email-already-in-use":
+                        showError(context,
+                            "The email entered previously was already in used. Please go to login page.");
+                        break;
                     }
-                    FirebaseFirestore.instance
-                        .collection('MerchantData')
-                        .doc(user.user!.uid)
-                        .set({
-                      "uid": _firebaseAuth.currentUser!.uid.toString(),
-                      "email": user.user!.email,
-                      "name": widget._nameController.text,
-                      "shopLogo": imageUrl,
-                      "storeName": _storeNameController.text,
-                      "storeAddress": _storeAddressOneController.text +
-                          "," +
-                          _storeAddressTwoController.text +
-                          "," +
-                          _storePostalCodeController.text +
-                          "," +
-                          _storeCityController.text +
-                          "," +
-                          _storeStateController.text +
-                          "," +
-                          _storeCountryController.text,
-                      "isMerchant": true
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Verify()));
                   }
-                },
-                child: Text('Sign Up',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w600)),
-              ),
+                  FirebaseFirestore.instance
+                      .collection('MerchantData')
+                      .doc(user.user!.uid)
+                      .set({
+                    "uid": _firebaseAuth.currentUser!.uid.toString(),
+                    "email": user.user!.email,
+                    "name": widget._nameController.text,
+                    "shopLogo": imageUrl,
+                    "storeName": _storeNameController.text,
+                    "storeAddress": _storeAddressOneController.text +
+                        "," +
+                        _storeAddressTwoController.text +
+                        "," +
+                        _storePostalCodeController.text +
+                        "," +
+                        _storeCityController.text +
+                        "," +
+                        _storeStateController.text +
+                        "," +
+                        _storeCountryController.text,
+                    "isMerchant": true
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Verify()));
+                }
+              },
+              child: Text('Sign Up',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600)),
             ),
+          ),
           SizedBox(height: 10.0),
-          if (!isKeyboard)
-            Container(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text:
-                        "By signing up, you agree to our Terms of Service and Privacy Policy",
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontFamily: 'Roboto',
-                        color: Colors.black)),
-              ),
-              width: 300,
+
+          Container(
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text:
+                      "By signing up, you agree to our Terms of Service and Privacy Policy",
+                  style: TextStyle(
+                      fontSize: 11, fontFamily: 'Roboto', color: Colors.black)),
             ),
+            width: 300,
+          ),
           // SignInButton(
           //       Buttons.Google,
           //       onPressed: () {

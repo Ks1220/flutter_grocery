@@ -216,209 +216,53 @@ class _AddItemState extends State<AddItem> {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      appBar: !isKeyboard
-          ? AppBar(
-              toolbarHeight: 65.0,
-              iconTheme: IconThemeData(
-                color: Color(0xff2C6846), //change your color here
-              ),
-              title: const Text('Item Details',
-                  style: TextStyle(color: Colors.black)),
-              elevation: 0,
-              backgroundColor: Colors.white,
-              actions: <Widget>[
-                (widget._isEdit == true
-                    ? MaterialButton(
-                        onPressed: () => {showDeleteItemsDialog()},
-                        child: Row(children: <Widget>[
-                          Icon(Icons.delete_forever,
-                              size: 25, color: Colors.red),
-                          Center(
-                              child: Padding(
-                            padding: EdgeInsets.fromLTRB(5, 0, 3, 0),
-                            child: Text("Delete Forever",
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15),
-                                textAlign: TextAlign.center),
-                          ))
-                        ]),
-                      )
-                    : Container())
-              ],
-            )
-          : null,
-      body: Center(
-          child: Column(
-        children: <Widget>[
-          SizedBox(height: 20),
-          Container(
-            width: mediaQueryData.size.width * 0.85,
-            child: Form(
-                key: _formKey,
-                child: Column(children: [
-                  TextFormField(
-                    controller: _itemNameController,
-                    validator: (input) {
-                      if (input!.isEmpty) return 'Please enter an item name';
-                    },
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorStyle: TextStyle(height: 0.4),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xff2C6846))),
-                      focusColor: Color(0xff2C6846),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Color(0xff2C6846),
-                      )),
-                      labelStyle: TextStyle(color: Color(0xff2C6846)),
-                      labelText: "Item Name",
-                    ),
-                  ),
-                  SizedBox(height: 25),
-                  _imageFile != null
-                      ? Container(
-                          child: Stack(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  DottedBorder(
-                                    padding: EdgeInsets.all(10.0),
-                                    color: Color(0xff2C6846),
-                                    child: (widget._isEdit == true
-                                        ? Image.network(imageUrl,
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover)
-                                        : Image.file(_imageFile!,
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover)),
-                                    borderType: BorderType.RRect,
-                                    radius: Radius.circular(5),
-                                    dashPattern: [10, 5],
-                                  ),
-                                ],
-                              ),
-                              (widget._isEdit == false
-                                  ? Align(
-                                      alignment: Alignment.topLeft,
-                                      child: CircleAvatar(
-                                        radius: 10,
-                                        backgroundColor: Colors.white,
-                                        child: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          alignment: Alignment.topLeft,
-                                          icon: Icon(Icons.remove_circle),
-                                          color: Colors.red,
-                                          onPressed: () => {showMyDialog()},
-                                        ),
-                                      ))
-                                  : Container())
-                            ],
-                          ),
-                        )
-                      : (SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: 120,
-                          child: DottedBorder(
-                            color: Color(0xff2C6846),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        RawMaterialButton(
-                                          onPressed: () => {
-                                            pickImage(ImageSource.gallery),
-                                          },
-                                          elevation: 2.0,
-                                          fillColor: Color(0xff2C6846),
-                                          child: Icon(
-                                            Icons.image,
-                                            size: 35.0,
-                                            color: Colors.white,
-                                          ),
-                                          padding: EdgeInsets.all(15.0),
-                                          shape: CircleBorder(),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        Text("Upload Image",
-                                            style: TextStyle(
-                                                color: Color(0xff2C6846)))
-                                      ],
-                                    )),
-                                Text("or",
-                                    style: TextStyle(color: Color(0xff2C6846))),
-                                Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        RawMaterialButton(
-                                          onPressed: () =>
-                                              pickImage(ImageSource.camera),
-                                          elevation: 2.0,
-                                          fillColor: Colors.white,
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            size: 35.0,
-                                            color: Color(0xff2C6846),
-                                          ),
-                                          padding: EdgeInsets.all(15.0),
-                                          shape: CircleBorder(),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        Text("Take Photo",
-                                            style: TextStyle(
-                                                color: Color(0xff2C6846)))
-                                      ],
-                                    )),
-                              ],
-                            ),
-                            borderType: BorderType.RRect,
-                            radius: Radius.circular(5),
-                            dashPattern: [10, 5],
-                          ),
-                        )),
-                  (widget._isEdit == true
-                      ? Container(
-                          margin: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
-                          child: Text(
-                              "* Changing image feature is yet to be available, stay tune!",
-                              style:
-                                  TextStyle(fontSize: 14.0, color: Colors.red)))
-                      : Container()),
-                  SizedBox(height: 25),
-                  TextFormField(
-                    keyboardType: TextInputType.multiline,
-                    minLines: 4,
-                    maxLines: null,
-                    controller: _itemDescriptionController,
-                    validator: (input) {
-                      if (input!.isEmpty)
-                        return 'Description is required for every items';
-                    },
-                    decoration: InputDecoration(
+      appBar: AppBar(
+        toolbarHeight: 65.0,
+        iconTheme: IconThemeData(
+          color: Color(0xff2C6846), //change your color here
+        ),
+        title:
+            const Text('Item Details', style: TextStyle(color: Colors.black)),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          (widget._isEdit == true
+              ? MaterialButton(
+                  onPressed: () => {showDeleteItemsDialog()},
+                  child: Row(children: <Widget>[
+                    Icon(Icons.delete_forever, size: 25, color: Colors.red),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0, 3, 0),
+                      child: Text("Delete Forever",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15),
+                          textAlign: TextAlign.center),
+                    ))
+                  ]),
+                )
+              : Container())
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+            child: Column(
+          children: <Widget>[
+            Container(
+              width: mediaQueryData.size.width * 0.85,
+              child: Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    TextFormField(
+                      controller: _itemNameController,
+                      validator: (input) {
+                        if (input!.isEmpty) return 'Please enter an item name';
+                      },
+                      decoration: InputDecoration(
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
@@ -434,139 +278,292 @@ class _AddItemState extends State<AddItem> {
                           color: Color(0xff2C6846),
                         )),
                         labelStyle: TextStyle(color: Color(0xff2C6846)),
-                        labelText: "Item Description",
-                        hintText: "Enter details for this product"),
-                  ),
-                  SizedBox(height: 25),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: _itemStockController,
-                          validator: (input) {
-                            if (input!.isEmpty)
-                              return 'Stock Amount is required';
-                          },
-                          decoration: InputDecoration(
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            errorStyle: TextStyle(height: 0.4),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff2C6846))),
-                            focusColor: Color(0xff2C6846),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                              color: Color(0xff2C6846),
-                            )),
-                            labelStyle: TextStyle(color: Color(0xff2C6846)),
-                            labelText: "Stock Amount",
-                          ),
-                        ),
+                        labelText: "Item Name",
                       ),
-                      SizedBox(width: 10.0),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: _itemPriceController,
-                          validator: (input) {
-                            if (input!.isEmpty) return 'Item Price is required';
-                          },
-                          decoration: InputDecoration(
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            errorStyle: TextStyle(height: 0.4),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff2C6846))),
-                            focusColor: Color(0xff2C6846),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                              color: Color(0xff2C6846),
-                            )),
-                            labelStyle: TextStyle(color: Color(0xff2C6846)),
-                            labelText: "Item Price (RM)",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25.0),
-                  // TextFormField(
-                  //   controller: _itemMeasurementController,
-                  //   validator: (input) {
-                  //     if (input!.isEmpty)
-                  //       return 'Pleas enter a Measurement Matrix for this item';
-                  //   },
-                  //   decoration: InputDecoration(
-                  //     focusedErrorBorder: OutlineInputBorder(
-                  //       borderSide: BorderSide(color: Colors.red),
-                  //     ),
-                  //     errorBorder: OutlineInputBorder(
-                  //       borderSide: BorderSide(color: Colors.red),
-                  //     ),
-                  //     errorStyle: TextStyle(height: 0.4),
-                  //     enabledBorder: OutlineInputBorder(
-                  //         borderSide: BorderSide(color: Color(0xff2C6846))),
-                  //     focusColor: Color(0xff2C6846),
-                  //     focusedBorder: OutlineInputBorder(
-                  //         borderSide: BorderSide(
-                  //       color: Color(0xff2C6846),
-                  //     )),
-                  //     labelStyle: TextStyle(color: Color(0xff2C6846)),
-                  //     labelText: "Measure Matrix (e.g: kg, g, ml, l)",
-                  //   ),
-                  // ),
-                  DropdownButtonFormField(
-                    value: dropdownvalue,
-                    validator: (input) {
-                      if (input.toString().isEmpty)
-                        return 'Pleas enter a Measurement Matrix for this item';
-                    },
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorStyle: TextStyle(height: 0.4),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xff2C6846))),
-                      focusColor: Color(0xff2C6846),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Color(0xff2C6846),
-                      )),
-                      labelStyle: TextStyle(color: Color(0xff2C6846)),
-                      labelText: "Measure Matrix (e.g: kg, g, ml, l)",
                     ),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: measurementMatrix.map((items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalue = newValue!;
-                      });
-                    },
-                  ),
-                ])),
-          ),
-          SizedBox(height: 30),
-          if (!isKeyboard)
+                    SizedBox(height: 25),
+                    _imageFile != null
+                        ? Container(
+                            child: Stack(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    DottedBorder(
+                                      padding: EdgeInsets.all(10.0),
+                                      color: Color(0xff2C6846),
+                                      child: (widget._isEdit == true
+                                          ? Image.network(imageUrl,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover)
+                                          : Image.file(_imageFile!,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover)),
+                                      borderType: BorderType.RRect,
+                                      radius: Radius.circular(5),
+                                      dashPattern: [10, 5],
+                                    ),
+                                  ],
+                                ),
+                                (widget._isEdit == false
+                                    ? Align(
+                                        alignment: Alignment.topLeft,
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor: Colors.white,
+                                          child: IconButton(
+                                            padding: EdgeInsets.zero,
+                                            alignment: Alignment.topLeft,
+                                            icon: Icon(Icons.remove_circle),
+                                            color: Colors.red,
+                                            onPressed: () => {showMyDialog()},
+                                          ),
+                                        ))
+                                    : Container())
+                              ],
+                            ),
+                          )
+                        : (SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 120,
+                            child: DottedBorder(
+                              color: Color(0xff2C6846),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          RawMaterialButton(
+                                            onPressed: () => {
+                                              pickImage(ImageSource.gallery),
+                                            },
+                                            elevation: 2.0,
+                                            fillColor: Color(0xff2C6846),
+                                            child: Icon(
+                                              Icons.image,
+                                              size: 35.0,
+                                              color: Colors.white,
+                                            ),
+                                            padding: EdgeInsets.all(15.0),
+                                            shape: CircleBorder(),
+                                          ),
+                                          SizedBox(height: 10.0),
+                                          Text("Upload Image",
+                                              style: TextStyle(
+                                                  color: Color(0xff2C6846)))
+                                        ],
+                                      )),
+                                  Text("or",
+                                      style:
+                                          TextStyle(color: Color(0xff2C6846))),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          RawMaterialButton(
+                                            onPressed: () =>
+                                                pickImage(ImageSource.camera),
+                                            elevation: 2.0,
+                                            fillColor: Colors.white,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              size: 35.0,
+                                              color: Color(0xff2C6846),
+                                            ),
+                                            padding: EdgeInsets.all(15.0),
+                                            shape: CircleBorder(),
+                                          ),
+                                          SizedBox(height: 10.0),
+                                          Text("Take Photo",
+                                              style: TextStyle(
+                                                  color: Color(0xff2C6846)))
+                                        ],
+                                      )),
+                                ],
+                              ),
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(5),
+                              dashPattern: [10, 5],
+                            ),
+                          )),
+                    (widget._isEdit == true
+                        ? Container(
+                            margin: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+                            child: Text(
+                                "* Changing image feature is yet to be available, stay tune!",
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.red)))
+                        : Container()),
+                    SizedBox(height: 25),
+                    TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      minLines: 4,
+                      maxLines: null,
+                      controller: _itemDescriptionController,
+                      validator: (input) {
+                        if (input!.isEmpty)
+                          return 'Description is required for every items';
+                      },
+                      decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorStyle: TextStyle(height: 0.4),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff2C6846))),
+                          focusColor: Color(0xff2C6846),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Color(0xff2C6846),
+                          )),
+                          labelStyle: TextStyle(color: Color(0xff2C6846)),
+                          labelText: "Item Description",
+                          hintText: "Enter details for this product"),
+                    ),
+                    SizedBox(height: 25),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: _itemStockController,
+                            validator: (input) {
+                              if (input!.isEmpty)
+                                return 'Stock Amount is required';
+                            },
+                            decoration: InputDecoration(
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              errorStyle: TextStyle(height: 0.4),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff2C6846))),
+                              focusColor: Color(0xff2C6846),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                color: Color(0xff2C6846),
+                              )),
+                              labelStyle: TextStyle(color: Color(0xff2C6846)),
+                              labelText: "Stock Amount",
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: _itemPriceController,
+                            validator: (input) {
+                              if (input!.isEmpty)
+                                return 'Item Price is required';
+                            },
+                            decoration: InputDecoration(
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              errorStyle: TextStyle(height: 0.4),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff2C6846))),
+                              focusColor: Color(0xff2C6846),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                color: Color(0xff2C6846),
+                              )),
+                              labelStyle: TextStyle(color: Color(0xff2C6846)),
+                              labelText: "Item Price (RM)",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25.0),
+                    // TextFormField(
+                    //   controller: _itemMeasurementController,
+                    //   validator: (input) {
+                    //     if (input!.isEmpty)
+                    //       return 'Pleas enter a Measurement Matrix for this item';
+                    //   },
+                    //   decoration: InputDecoration(
+                    //     focusedErrorBorder: OutlineInputBorder(
+                    //       borderSide: BorderSide(color: Colors.red),
+                    //     ),
+                    //     errorBorder: OutlineInputBorder(
+                    //       borderSide: BorderSide(color: Colors.red),
+                    //     ),
+                    //     errorStyle: TextStyle(height: 0.4),
+                    //     enabledBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(color: Color(0xff2C6846))),
+                    //     focusColor: Color(0xff2C6846),
+                    //     focusedBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //       color: Color(0xff2C6846),
+                    //     )),
+                    //     labelStyle: TextStyle(color: Color(0xff2C6846)),
+                    //     labelText: "Measure Matrix (e.g: kg, g, ml, l)",
+                    //   ),
+                    // ),
+                    DropdownButtonFormField(
+                      value: dropdownvalue,
+                      validator: (input) {
+                        if (input.toString().isEmpty)
+                          return 'Pleas enter a Measurement Matrix for this item';
+                      },
+                      decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: TextStyle(height: 0.4),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff2C6846))),
+                        focusColor: Color(0xff2C6846),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff2C6846),
+                        )),
+                        labelStyle: TextStyle(color: Color(0xff2C6846)),
+                        labelText: "Measure Matrix (e.g: kg, g, ml, l)",
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: measurementMatrix.map((items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownvalue = newValue!;
+                        });
+                      },
+                    ),
+                  ])),
+            ),
+            SizedBox(height: 30),
             ButtonTheme(
               buttonColor: Color(0xff2C6846),
               minWidth: mediaQueryData.size.width * 0.85,
@@ -684,8 +681,9 @@ class _AddItemState extends State<AddItem> {
                         fontWeight: FontWeight.w600)),
               ),
             ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 }
