@@ -1,4 +1,4 @@
-# <img src="https://user-images.githubusercontent.com/62043437/154081984-36b1d7f0-9d3a-4a70-8287-115f6b8df748.jpg" width="50" title="hover text"> Grocerex - A brand new grocery shopping experience!
+# <img src="https://user-images.githubusercontent.com/62043437/154081984-36b1d7f0-9d3a-4a70-8287-115f6b8df748.jpg" width="50" title="hover text"> Grocerex (Merchant)- For merchant to upload their groceries with ease!
 
 In this project, we will create an e-commerce for groceries application using flutter and firebase. 
 Authors:
@@ -23,7 +23,7 @@ Authors:
 Download the zip file or directly clone from github using the command:
 
 ```
-git clone https://github.com/Ks1220/budget_calculator_scala.git
+git clone https://github.com/Ks1220/flutter_grocery.git
 ```
 
 ### Prerequisites
