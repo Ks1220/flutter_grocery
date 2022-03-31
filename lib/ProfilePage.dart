@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 
@@ -38,6 +39,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   File? _imageFile;
   late String imageUrl;
+
+  var latitude;
+  var longitude;
 
   getData() async {
     var firestore = FirebaseFirestore.instance;
@@ -836,6 +840,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                           onPressed: () async {
                                             if (_formKey.currentState!
                                                 .validate()) {
+                                              //test
+                                              var coordinates = await Geocoder
+                                                  .local
+                                                  .findAddressesFromQuery(
+                                                      _storeAddressController
+                                                          .text);
+                                              latitude = coordinates
+                                                  .first.coordinates.latitude;
+                                              longitude = coordinates
+                                                  .first.coordinates.longitude;
                                               await FirebaseFirestore.instance
                                                   .collection('MerchantData')
                                                   .doc(widget.currentUser?.uid)
@@ -843,6 +857,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 "storeAddress":
                                                     _storeAddressController
                                                         .text,
+                                                "latitude": latitude,
+                                                "longitude": longitude,
                                               }).then((value) => showFlash(
                                                         context: context,
                                                         duration:
