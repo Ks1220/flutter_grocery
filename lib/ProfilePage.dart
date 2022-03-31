@@ -19,13 +19,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late final Future? myFuture;
-
   @override
   void initState() {
     super.initState();
     getData();
-    myFuture = getData();
   }
 
   @override
