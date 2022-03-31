@@ -12,6 +12,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:path/path.dart' as Path;
 
 class StoreDetails extends StatefulWidget {
@@ -42,6 +44,10 @@ class _StoreDetailsState extends State<StoreDetails> {
 
   File? _imageFile;
   late String imageUrl;
+
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  var latitude;
+  var longitude;
 
   @override
   void initState() {
@@ -190,6 +196,41 @@ class _StoreDetailsState extends State<StoreDetails> {
       });
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
+    }
+  }
+
+  _getCoordinates(user) async {
+    try {
+      var coordinates = await Geocoder.local.findAddressesFromQuery(
+          "${_storeAddressOneController.text + "," + _storeAddressTwoController.text + "," + _storePostalCodeController.text + "," + _storeCityController.text + "," + _storeStateController.text + "," + _storeCountryController.text}");
+      latitude = coordinates.first.coordinates.latitude;
+      longitude = coordinates.first.coordinates.longitude;
+      FirebaseFirestore.instance
+          .collection('MerchantData')
+          .doc(user.user!.uid)
+          .set({
+        "uid": _firebaseAuth.currentUser!.uid.toString(),
+        "email": user.user!.email,
+        "name": widget._nameController.text,
+        "shopLogo": imageUrl,
+        "storeName": _storeNameController.text,
+        "storeAddress": _storeAddressOneController.text +
+            "," +
+            _storeAddressTwoController.text +
+            "," +
+            _storePostalCodeController.text +
+            "," +
+            _storeCityController.text +
+            "," +
+            _storeStateController.text +
+            "," +
+            _storeCountryController.text,
+        "latitude": latitude,
+        "longitude": longitude,
+        "isMerchant": true
+      });
+    } catch (e) {
+      print("ERROR: $e");
     }
   }
 
@@ -421,6 +462,41 @@ class _StoreDetailsState extends State<StoreDetails> {
                       ),
                       SizedBox(width: 10.0),
                       Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          controller: _storeCityController,
+                          validator: (input) {
+                            if (input!.length < 2)
+                              return 'Please enter a correct city';
+                          },
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                            errorStyle: TextStyle(height: 0.4),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff2C6846))),
+                            focusColor: Color(0xff2C6846),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                              color: Color(0xff2C6846),
+                            )),
+                            labelStyle: TextStyle(color: Color(0xff2C6846)),
+                            labelText: "City",
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Expanded(
                         child: TextFormField(
                           controller: _storeStateController,
                           validator: (input) {
@@ -447,33 +523,36 @@ class _StoreDetailsState extends State<StoreDetails> {
                           ),
                         ),
                       ),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _storeCountryController,
+                          validator: (input) {
+                            if (input!.length < 2)
+                              return 'Please enter a correct country';
+                          },
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                            errorStyle: TextStyle(height: 0.4),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff2C6846))),
+                            focusColor: Color(0xff2C6846),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                              color: Color(0xff2C6846),
+                            )),
+                            labelStyle: TextStyle(color: Color(0xff2C6846)),
+                            labelText: "Country",
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
-                  SizedBox(height: 15),
-                  TextFormField(
-                    controller: _storeCountryController,
-                    validator: (input) {
-                      if (input!.length < 2)
-                        return 'Please enter a correct country';
-                    },
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorStyle: TextStyle(height: 0.4),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xff2C6846))),
-                      focusColor: Color(0xff2C6846),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Color(0xff2C6846),
-                      )),
-                      labelStyle: TextStyle(color: Color(0xff2C6846)),
-                      labelText: "Country",
-                    ),
                   ),
                 ])),
           ),
@@ -503,28 +582,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                         break;
                     }
                   }
-                  FirebaseFirestore.instance
-                      .collection('MerchantData')
-                      .doc(user.user!.uid)
-                      .set({
-                    "uid": _firebaseAuth.currentUser!.uid.toString(),
-                    "email": user.user!.email,
-                    "name": widget._nameController.text,
-                    "shopLogo": imageUrl,
-                    "storeName": _storeNameController.text,
-                    "storeAddress": _storeAddressOneController.text +
-                        "," +
-                        _storeAddressTwoController.text +
-                        "," +
-                        _storePostalCodeController.text +
-                        "," +
-                        _storeCityController.text +
-                        "," +
-                        _storeStateController.text +
-                        "," +
-                        _storeCountryController.text,
-                    "isMerchant": true
-                  });
+                  _getCoordinates(user);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
