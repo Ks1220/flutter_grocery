@@ -43,7 +43,7 @@ class _RegisteredState extends State<Registered> {
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    text: "Register ",
+                    text: "Registered ",
                     style: TextStyle(
                         fontSize: mediaQueryData.textScaleFactor /
                             mediaQueryData.textScaleFactor *
@@ -76,10 +76,9 @@ class _RegisteredState extends State<Registered> {
                   borderRadius: new BorderRadius.circular(5.0),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage()));
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false);
                 },
                 child: Text('Done',
                     style: TextStyle(
