@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: isKeyboard
+      appBar: !isKeyboard
           ? AppBar(
               titleSpacing: 12,
               leading: ModalRoute.of(context)?.canPop == true
