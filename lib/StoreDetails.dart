@@ -404,10 +404,6 @@ class _StoreDetailsState extends State<StoreDetails> {
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _storeAddressTwoController,
-                    validator: (input) {
-                      if (input!.length < 5)
-                        return 'Please enter an appropriate address';
-                    },
                     decoration: InputDecoration(
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.red),
