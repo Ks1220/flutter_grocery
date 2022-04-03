@@ -253,6 +253,7 @@ class _AddItemState extends State<AddItem> {
             child: Column(
           children: <Widget>[
             Container(
+              margin: EdgeInsets.only(top: 5),
               width: mediaQueryData.size.width * 0.85,
               child: Form(
                   key: _formKey,
@@ -668,10 +669,9 @@ class _AddItemState extends State<AddItem> {
                       Future.delayed(const Duration(seconds: 2), () {});
                     }
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => HomePage()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (Route<dynamic> route) => false);
                   }
                 },
                 child: Text('Save',
