@@ -16,20 +16,15 @@ class AuthService {
           backgroundColor: Colors.red,
           position: FlashPosition.top,
           child: Container(
+              alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
               height: 70,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    errormessage.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
+              child: Text(
+                errormessage.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
               )),
         );
       },
