@@ -277,14 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: CircleAvatar(
                           radius: 50.0,
                           child: ClipRRect(
-                            child:
-                                // Image(
-                                //   height: 100,
-                                //   width: 100,
-                                //   image: NetworkImage(imageUrl),
-                                //   fit: BoxFit.fill,
-                                // ),
-                                CachedNetworkImage(
+                            child: CachedNetworkImage(
                               width: 100,
                               height: 100,
                               imageUrl: imageUrl,
