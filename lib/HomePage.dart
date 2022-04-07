@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -213,12 +214,25 @@ class _HomePageState extends State<HomePage> {
                                     subtitle: Text(items.length > 0
                                         ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
                                         : ""),
-                                    leading: (Image(
+                                    leading: CachedNetworkImage(
+                                      width: 65,
+                                      height: 65,
+                                      imageUrl: items[index]["itemImage"],
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              SizedBox(
                                         width: 65,
                                         height: 65,
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            items[index]["itemImage"]))),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                      fit: BoxFit.fill,
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
                                     trailing: Text(items.length > 0
                                         ? "Stock: ${items[index]["stockAmount"]}"
                                         : ""),
@@ -283,12 +297,25 @@ class _HomePageState extends State<HomePage> {
                                     subtitle: Text(items[index] != null
                                         ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
                                         : ""),
-                                    leading: (Image(
+                                    leading: CachedNetworkImage(
+                                      width: 65,
+                                      height: 65,
+                                      imageUrl: items[index]["itemImage"],
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              SizedBox(
                                         width: 65,
                                         height: 65,
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            items[index]["itemImage"]))),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                      fit: BoxFit.fill,
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
                                     trailing: Text(items[index] != null
                                         ? "Stock: ${items[index]["stockAmount"]}"
                                         : ""),

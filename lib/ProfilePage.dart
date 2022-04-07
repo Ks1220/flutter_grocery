@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -276,11 +277,30 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: CircleAvatar(
                           radius: 50.0,
                           child: ClipRRect(
-                            child: Image(
-                              height: 100,
+                            child:
+                                // Image(
+                                //   height: 100,
+                                //   width: 100,
+                                //   image: NetworkImage(imageUrl),
+                                //   fit: BoxFit.fill,
+                                // ),
+                                CachedNetworkImage(
                               width: 100,
-                              image: NetworkImage(imageUrl),
+                              height: 100,
+                              imageUrl: imageUrl,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                              ),
                               fit: BoxFit.fill,
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             ),
                             borderRadius: BorderRadius.circular(50.0),
                           ),

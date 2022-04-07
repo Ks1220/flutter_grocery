@@ -46,6 +46,7 @@ dependencies:
     csc_picker: ^0.2.6
     geolocator: ^5.3.1
     geocoder: ^0.2.1
+    cached_network_image: ^3.2.0
 
 dev_dependencies:
     flutter_test:
