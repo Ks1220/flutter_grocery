@@ -495,31 +495,6 @@ class _AddItemState extends State<AddItem> {
                       ],
                     ),
                     SizedBox(height: 25.0),
-                    // TextFormField(
-                    //   controller: _itemMeasurementController,
-                    //   validator: (input) {
-                    //     if (input!.isEmpty)
-                    //       return 'Pleas enter a Measurement Matrix for this item';
-                    //   },
-                    //   decoration: InputDecoration(
-                    //     focusedErrorBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.red),
-                    //     ),
-                    //     errorBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.red),
-                    //     ),
-                    //     errorStyle: TextStyle(height: 0.4),
-                    //     enabledBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(color: Color(0xff2C6846))),
-                    //     focusColor: Color(0xff2C6846),
-                    //     focusedBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //       color: Color(0xff2C6846),
-                    //     )),
-                    //     labelStyle: TextStyle(color: Color(0xff2C6846)),
-                    //     labelText: "Measure Matrix (e.g: kg, g, ml, l)",
-                    //   ),
-                    // ),
                     DropdownButtonFormField(
                       value: dropdownvalue,
                       validator: (input) {
