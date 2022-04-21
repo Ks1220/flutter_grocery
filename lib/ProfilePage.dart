@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
-                Text('Are you sure you want to log out?.'),
+                Text('Are you sure you want to log out?'),
               ],
             ),
           ),
