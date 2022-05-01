@@ -600,7 +600,8 @@ class _AddItemState extends State<AddItem> {
                         "itemImage": imageUrl,
                         "itemDescription": _itemDescriptionController.text,
                         "stockAmount": _itemStockController.text,
-                        "price": "RM" + _itemPriceController.text,
+                        "price": double.parse(_itemPriceController.text)
+                            .toStringAsFixed(2),
                         "measurementMatrix": dropdownvalue
                       }).then((value) => showFlash(
                                 context: context,

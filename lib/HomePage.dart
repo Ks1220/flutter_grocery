@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                                         ? "${items[index]["itemName"]}"
                                         : ""),
                                     subtitle: Text(items.length > 0
-                                        ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
+                                        ? "RM${items[index]["price"]}/${items[index]["measurementMatrix"]}"
                                         : ""),
                                     leading: CachedNetworkImage(
                                       width: 65,
@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                                         ? "${items[index]["itemName"]}"
                                         : ""),
                                     subtitle: Text(items[index] != null
-                                        ? "${items[index]["price"]}/${items[index]["measurementMatrix"]}"
+                                        ? "RM${items[index]["price"]}/${items[index]["measurementMatrix"]}"
                                         : ""),
                                     leading: CachedNetworkImage(
                                       width: 65,
