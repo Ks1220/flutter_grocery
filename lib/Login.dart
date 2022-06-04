@@ -2,6 +2,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grocery/AuthService.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'ForgotPassword.dart';
 import 'HomePage.dart';
 
 class Login extends StatefulWidget {
@@ -187,7 +188,20 @@ class _LoginState extends State<Login> {
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600))),
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                  child: Text('Forgot Password?',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Color(0xff2065F8),
+                      )),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ForgotPassword()));
+                  })
 
               // SignInButton(
               //   Buttons.Google,
