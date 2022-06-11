@@ -125,7 +125,7 @@ class _AddItemState extends State<AddItem> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Remove Image'),
+          title: const Text('Remove Items'),
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
