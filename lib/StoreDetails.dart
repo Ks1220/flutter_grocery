@@ -457,8 +457,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         child: TextFormField(
                           controller: _storeCityController,
                           validator: (input) {
-                            if (input!.length < 2)
-                              return 'Please enter a correct city';
+                            if (input!.length < 2) return 'City is required';
                           },
                           decoration: InputDecoration(
                             focusedErrorBorder: OutlineInputBorder(
@@ -491,7 +490,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         child: TextFormField(
                           controller: _storeStateController,
                           validator: (input) {
-                            if (input!.length < 2) return 'No such state';
+                            if (input!.length < 2) return 'State is required';
                           },
                           decoration: InputDecoration(
                             focusedErrorBorder: OutlineInputBorder(
@@ -519,8 +518,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         child: TextFormField(
                           controller: _storeCountryController,
                           validator: (input) {
-                            if (input!.length < 2)
-                              return 'Please enter a correct country';
+                            if (input!.length < 2) return 'Country is required';
                           },
                           decoration: InputDecoration(
                             focusedErrorBorder: OutlineInputBorder(
@@ -601,6 +599,7 @@ class _StoreDetailsState extends State<StoreDetails> {
             ),
             width: 300,
           ),
+          SizedBox(height: 10.0),
           // SignInButton(
           //       Buttons.Google,
           //       onPressed: () {

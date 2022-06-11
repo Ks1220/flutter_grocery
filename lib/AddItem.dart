@@ -439,7 +439,7 @@ class _AddItemState extends State<AddItem> {
                             controller: _itemStockController,
                             validator: (input) {
                               if (input!.isEmpty)
-                                return 'Stock Amount is required';
+                                return 'Stock Amount required';
                             },
                             decoration: InputDecoration(
                               focusedErrorBorder: OutlineInputBorder(
@@ -468,8 +468,7 @@ class _AddItemState extends State<AddItem> {
                             keyboardType: TextInputType.number,
                             controller: _itemPriceController,
                             validator: (input) {
-                              if (input!.isEmpty)
-                                return 'Item Price is required';
+                              if (input!.isEmpty) return 'Item Price required';
                             },
                             decoration: InputDecoration(
                               focusedErrorBorder: OutlineInputBorder(

@@ -272,9 +272,11 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: new BorderRadius.circular(5.0),
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => StoreDetails(_nameController,
-                          _emailController, _passwordController)));
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => StoreDetails(_nameController,
+                            _emailController, _passwordController)));
+                  }
                 },
                 child: Text('Next',
                     style: TextStyle(
