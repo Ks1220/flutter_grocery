@@ -6,10 +6,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_grocery/MerchantFeedback.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 
+import 'ForgotPassword.dart';
 import 'Start.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -920,10 +922,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ));
                               });
                         },
-                        shape: Border(
-                            bottom: BorderSide(
-                                color: Color.fromARGB(255, 199, 199, 199),
-                                width: 1)),
                         leading: (Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -959,37 +957,79 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ForgotPassword()));
+                        },
+                        child: ListTile(
+                          shape: Border(
+                              top: BorderSide(
+                                  color: Color.fromARGB(255, 199, 199, 199),
+                                  width: 1),
+                              bottom: BorderSide(
+                                  color: Color.fromARGB(255, 199, 199, 199),
+                                  width: 1)),
+                          leading: (Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Change Password",
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          )),
+                          trailing: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.chevron_right,
+                                size: 26,
+                                color: Colors.black,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 40,
                       ),
-                      ListTile(
-                        shape: Border(
-                            top: BorderSide(
-                                color: Color.fromARGB(255, 199, 199, 199),
-                                width: 1),
-                            bottom: BorderSide(
-                                color: Color.fromARGB(255, 199, 199, 199),
-                                width: 1)),
-                        leading: (Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Change Password",
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        )),
-                        trailing: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.chevron_right,
-                              size: 26,
-                              color: Colors.black,
-                            )
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => MerchantFeedback()));
+                        },
+                        child: ListTile(
+                          shape: Border(
+                              top: BorderSide(
+                                  color: Color.fromARGB(255, 199, 199, 199),
+                                  width: 1),
+                              bottom: BorderSide(
+                                  color: Color.fromARGB(255, 199, 199, 199),
+                                  width: 1)),
+                          leading: (Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Feedback",
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          )),
+                          trailing: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.chevron_right,
+                                size: 26,
+                                color: Colors.black,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ]);
