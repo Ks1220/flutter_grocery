@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/Home.dart';
 import 'package:flutter_grocery/HomePage.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'Start.dart';
@@ -20,8 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             body: DoubleBackToCloseApp(
-          child:
-              FirebaseAuth.instance.currentUser != null ? HomePage() : Start(),
+          child: FirebaseAuth.instance.currentUser != null ? Home() : Start(),
           snackBar:
               const SnackBar(content: Text("Press/Swipe back again to leave")),
         )));
