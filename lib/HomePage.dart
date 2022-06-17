@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/MyOrders.dart';
 import 'package:flutter_grocery/ProfilePage.dart';
 import 'package:flutter_grocery/databaseManager/DatabaseManager.dart';
 
@@ -34,6 +35,9 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
 
+  late PageController _pageController;
+  List<Widget> tabs = [HomePage(), MyOrders()];
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +55,7 @@ class _HomePageState extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.jumpToPage(index);
     });
   }
 
@@ -331,22 +336,6 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Add Grocery Item',
         backgroundColor: Color(0xff2C6846),
         child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedIconTheme: IconThemeData(color: Color(0xff2C6846)),
-        selectedItemColor: Color(0xff2C6846),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Orders',
-          ),
-        ],
       ),
     );
   }
