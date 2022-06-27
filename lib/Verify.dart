@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/Login.dart';
 import 'package:flutter_grocery/Registered.dart';
 
 class Verify extends StatefulWidget {
@@ -102,6 +103,29 @@ class _VerifyState extends State<Verify> {
                                 "Once verified, you will be able to enjoy all the most exciting feature such as uploading your grocery product into our application!"),
                       ])),
               width: mediaQueryData.size.width * 0.85,
+            ),
+            SizedBox(height: 20),
+            ButtonTheme(
+              buttonColor: Color(0xff2C6846),
+              minWidth: mediaQueryData.size.width * 0.85,
+              height: 60.0,
+              child: RaisedButton(
+                padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(5.0),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Login()));
+                },
+                child: Text('Next',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w600)),
+              ),
             ),
           ],
         ),
