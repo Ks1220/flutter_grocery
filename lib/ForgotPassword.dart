@@ -150,7 +150,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             .then((value) => {_emailController.clear()});
                       }
                     },
-                    child: Text('Send Password Reset Link',
+                    child: Text('Next',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,

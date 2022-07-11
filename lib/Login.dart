@@ -1,6 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grocery/AuthService.dart';
+import 'package:flutter_grocery/Home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'ForgotPassword.dart';
 import 'HomePage.dart';
@@ -250,7 +251,7 @@ class _LoginState extends State<Login> {
       _passwordController.clear();
       await Future.delayed(const Duration(seconds: 2), () {});
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => Home()),
           (Route<dynamic> route) => false);
     }
   }
