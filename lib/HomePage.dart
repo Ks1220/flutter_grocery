@@ -33,11 +33,6 @@ class _HomePageState extends State<HomePage> {
 
   late List groceries;
 
-  int _selectedIndex = 0;
-
-  late PageController _pageController;
-  List<Widget> tabs = [HomePage(), MyOrders()];
-
   @override
   void initState() {
     super.initState();
@@ -50,13 +45,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     searchController.dispose();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      _pageController.jumpToPage(index);
-    });
   }
 
   fetchGroceryItemList() async {

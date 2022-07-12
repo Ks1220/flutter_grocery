@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_grocery/Home.dart';
 
 import 'HomePage.dart';
 
@@ -77,7 +78,7 @@ class _RegisteredState extends State<Registered> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => Home()),
                       (Route<dynamic> route) => false);
                 },
                 child: Text('Done',

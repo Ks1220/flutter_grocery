@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_grocery/AuthService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_grocery/HomePage.dart';
+import 'package:flutter_grocery/Home.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 
@@ -200,7 +200,7 @@ class _AddItemState extends State<AddItem> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage()));
+                        builder: (BuildContext context) => Home()));
               },
             ),
           ],
@@ -640,7 +640,7 @@ class _AddItemState extends State<AddItem> {
                     }
 
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(builder: (context) => Home()),
                         (Route<dynamic> route) => false);
                   }
                 },
